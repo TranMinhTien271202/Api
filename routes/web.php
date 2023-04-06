@@ -4,9 +4,12 @@ use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\StudentLoginController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\TeacherLoginController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Middleware\CheckLogin;
 use App\Http\Middleware\CheckStudentLogin;
+use App\Http\Middleware\CheckTeacherLogin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::resource('subject', SubjectController::class);
 Route::middleware([CheckLogin::class])->group(function () {
     Route::resource('user', UserController::class);
     Route::get('auth-logout', [AuthController::class, 'logout'])->name('auth.logout');
@@ -33,10 +37,20 @@ Route::prefix('student')->group(function () {
     Route::post('/', [StudentLoginController::class, 'login'])->name('student.login.post');
     Route::get('register', [StudentLoginController::class, 'register'])->name('student.register');
     Route::post('register', [StudentLoginController::class, 'registerPost'])->name('student.register.post');
-    Route::get('logout', [StudentLoginController::class, 'logout'])->name('student.logout');
-    Route::middleware([CheckStudentLogin::class])->group(function(){
-        Route::get('/student', [StudentController::class, 'index'])->name('student.student');
+    Route::middleware([CheckStudentLogin::class])->group(function () {
+        Route::get('/student', [TeacherLoginController::class, 'index'])->name('student.student');
+        Route::get('logout', [StudentLoginController::class, 'logout'])->name('student.logout');
     });
+});
+Route::prefix('teacher')->group(function () {
+    Route::get('/', [TeacherLoginController::class, 'index'])->name('teacher.index');
+    Route::post('/', [TeacherLoginController::class, 'login'])->name('teacher.login');
+    Route::get('/register', [TeacherLoginController::class, 'register'])->name('teacher.register');
+    Route::post('/register', [TeacherLoginController::class, 'registerPost'])->name('teacher.register.post');
+    Route::middleware([CheckTeacherLogin::class])->group(function () {
+        Route::get('logout', [TeacherLoginController::class, 'logout'])->name('teacher.logout');
+    });
+
 });
 Route::get('auth', [AuthController::class, 'index'])->name('auth.index');
 Route::post('auth-login', [AuthController::class, 'login'])->name('auth.login');

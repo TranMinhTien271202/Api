@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class StudentController extends Controller
 {
     public function index(){
-        return view('student.auth.login');
+        return view('student.crud.index');
     }
 }

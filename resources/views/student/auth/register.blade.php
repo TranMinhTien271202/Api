@@ -16,7 +16,7 @@
 
 <body>
     <div class="container">
-        <center><h1>Register</h1></center>
+        <center><h1>Student Register</h1></center>
         <form style="width:40%;margin:auto" id="LoginForm" name="LoginForm" method="POST">
             <input type="text" name="_token" id="_token" value="{{ csrf_token() }}" hidden>
             <div class="mb-3">

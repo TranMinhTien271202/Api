@@ -17,7 +17,7 @@
 <body>
     <div class="container">
         <center>
-            <h1>Student Login</h1>
+            <h1>Teacher Login</h1>
         </center>
         <form style="width:40%;margin:auto" id="LoginForm" name="LoginForm" method="POST">
             <div class="mb-3">
@@ -33,7 +33,7 @@
             <button type="submit" id="btn-login" class="btn btn-primary">Login</button>
             <br>
             Chưa có tài khoản vui lòng đăng ký tại đây
-            <a href="{{route('student.register')}}">Register</a>
+            <a href="{{route('teacher.register')}}">Register</a>
         </form>
     </div>
     </div>
@@ -60,7 +60,7 @@
         $('#btn-login').click(function(e) {
             e.preventDefault();
             var _csrf = '{{ csrf_token() }}';
-            var url = "{{ route('student.login.post') }}"
+            var url = "{{ route('teacher.login') }}"
             var email = $('#email').val();
             var password = $('#password').val();
             // console.log(url, email, password, _csrf);
@@ -76,7 +76,7 @@
                     console.log(data);
                     if ($.isEmptyObject(data.message)) {
                         alert(data.success);
-                        window.location = '/student/student';
+                        // window.location = '/student/student';
                     } else {
                         printErrorMsg(data.message);
                     }

@@ -16,28 +16,33 @@
 
 <body>
     <div class="container">
-        <center>
-            <h1>Student Login</h1>
-        </center>
+        <center><h1>Student Register</h1></center>
         <form style="width:40%;margin:auto" id="LoginForm" name="LoginForm" method="POST">
+            <input type="text" name="_token" id="_token" value="{{ csrf_token() }}" hidden>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Họ và tên</label>
+                <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp"
+                    placeholder="Mời nhập họ và tên">
+                <span class="text-danger error-text name_err"></span>
+            </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp"
+                    placeholder="Mời nhập email">
                 <span class="text-danger error-text email_err"></span>
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password">
+                <label for="exampleInputPassword1" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" name="password" id="password"
+                    placeholder="Mời nhập mật khẩu">
                 <span class="text-danger error-text password_err"></span>
             </div>
-            <button type="submit" id="btn-login" class="btn btn-primary">Login</button>
+            <button type="submit" id="btn-create" class="btn btn-primary">Register</button>
             <br>
-            Chưa có tài khoản vui lòng đăng ký tại đây
-            <a href="{{route('student.register')}}">Register</a>
+            Đã có tài khoản vui lòng đăng nhập tại đây
+            <a href="{{route('teacher.index')}}">Login</a>
         </form>
     </div>
-    </div>
-
 </body>
 
 <script type="text/javascript">
@@ -48,41 +53,39 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        /*Click to Button*/
-        $('#createNewProduct').click(function() {
-            $('#saveBtn').val("create-product");
-            $('#product_id').val('');
-            $('#productForm').trigger("reset");
-            $('#LoginForm').trigger("reset");
-            $('#modelHeading').html("Create New Product");
-            $('#ajaxModel').modal('show');
-        });
-        $('#btn-login').click(function(e) {
+        $('#btn-create').click(function(e) {
             e.preventDefault();
-            var _csrf = '{{ csrf_token() }}';
-            var url = "{{ route('student.login.post') }}"
+            $(this).html('loading...');
+            var _token = $("input[name='_token']").val();
+            var url = "{{ route('teacher.register.post') }}"
             var email = $('#email').val();
             var password = $('#password').val();
-            // console.log(url, email, password, _csrf);
+            var name = $('#name').val();
+            console.log(url, email, password, name);
             $.ajax({
                 url: url,
                 type: 'POST',
+                dataType: 'json',
                 data: {
                     email: email,
                     password: password,
-                    _token: _csrf
+                    name: name,
                 },
                 success: function(data) {
                     console.log(data);
                     if ($.isEmptyObject(data.message)) {
                         alert(data.success);
-                        window.location = '/student/student';
+                        // window.location = '/auth';
                     } else {
                         printErrorMsg(data.message);
                     }
+                    // alert(data.success);
+
                 }
+
             })
         });
+
         function printErrorMsg(msg) {
             $.each(msg, function(key, value) {
                 console.log(key);
