@@ -1,13 +1,13 @@
 @extends('teacher.layout.app')
 @section('content')
     <h1>Crud</h1>
-    {{-- @if (auth('teacher')->user())
+    @if (auth('teacher')->user())
         Xin chào {{ auth('teacher')->user()->email }}
         <a href="{{route('teacher.logout')}}">Logout</a>
-
+        <a href="{{route('teacher.profile')}}">Profile</a>
     @else
 
-    @endif --}}
+    @endif
     <br>
     <a class="btn btn-success" href="javascript:void(0)" id="createNewProduct"> Create</a>
     <table class="table table-bordered data-table">

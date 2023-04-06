@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
-use Datatables;
+use Yajra\Datatables\Datatables;
 class SubjectController extends Controller
 {
     /**
@@ -13,7 +14,8 @@ class SubjectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Teacher::latest()->get();
+            $data = Subject::latest()->where('id' ,'!=' , auth('teacher')->user()->id)->get();
+
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

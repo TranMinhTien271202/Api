@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\StudentLoginController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\TeacherLoginController;
-use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Middleware\CheckLogin;
 use App\Http\Middleware\CheckStudentLogin;
 use App\Http\Middleware\CheckTeacherLogin;
@@ -27,10 +26,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('subject', SubjectController::class);
 Route::middleware([CheckLogin::class])->group(function () {
     Route::resource('user', UserController::class);
     Route::get('auth-logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::get('auth-profile', [AuthController::class, 'profile'])->name('auth.profile');
+    Route::post('auth-profile', [AuthController::class, 'updateProfile'])->name('auth.updateProfile');
 });
 Route::prefix('student')->group(function () {
     Route::get('/', [StudentLoginController::class, 'index'])->name('student.index');
@@ -47,14 +47,15 @@ Route::prefix('teacher')->group(function () {
     Route::post('/', [TeacherLoginController::class, 'login'])->name('teacher.login');
     Route::get('/register', [TeacherLoginController::class, 'register'])->name('teacher.register');
     Route::post('/register', [TeacherLoginController::class, 'registerPost'])->name('teacher.register.post');
+    Route::post('/1', [TeacherLoginController::class, 'registerPost1'])->name('teacher.register.1');
     Route::middleware([CheckTeacherLogin::class])->group(function () {
         Route::get('logout', [TeacherLoginController::class, 'logout'])->name('teacher.logout');
+        Route::resource('subject', SubjectController::class);
+        Route::get('teacher-profile', [TeacherController::class, 'profile'])->name('teacher.profile');
+        Route::post('teacher-profile', [TeacherController::class, 'profilePost'])->name('teacher.profile.post');
     });
-
 });
 Route::get('auth', [AuthController::class, 'index'])->name('auth.index');
 Route::post('auth-login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('auth-register', [AuthController::class, 'register'])->name('auth.register');
 Route::post('auth-register', [AuthController::class, 'store'])->name('auth.store');
-Route::get('auth-profile', [AuthController::class, 'profile'])->name('auth.profile');
-Route::post('auth-profile', [AuthController::class, 'updateProfile'])->name('auth.updateProfile');

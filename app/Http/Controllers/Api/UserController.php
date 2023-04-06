@@ -16,9 +16,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-
             $data = User::latest()->get();
-
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -61,10 +59,6 @@ class UserController extends Controller
         ]);
         return response()->json(['success' => 'Product successfully.', $request->all()]);
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
