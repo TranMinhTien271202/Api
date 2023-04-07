@@ -26,7 +26,7 @@ class TeacherController extends Controller
             ]);
         }else{
             $data->update([
-                'image' => null,
+                'image' => $data->image,
                 'name' => $request->name,
                 'phone' => $request->phone
             ]);

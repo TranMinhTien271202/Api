@@ -13,9 +13,9 @@
                 aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
-
+            <img src="{{ url('storage/'.$data->image) }}" alt="" title="" width="100px" />
             <label for="exampleInputEmail1" class="form-label">Image </label>
-            <input type="file" id="image" class="form-control"
+            <input type="file" id="image" class="form-control" value="{{ $data->image }}"
                 id="exampleInputEmail1" aria-describedby="emailHelp">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -52,7 +52,7 @@
                     success: function(res) {
                         // alert('Success');
                         console.log(res);
-                        // location.reload();
+                        location.reload();
                     },
                 })
             })

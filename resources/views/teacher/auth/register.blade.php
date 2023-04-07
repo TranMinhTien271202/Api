@@ -75,7 +75,7 @@
                     console.log(data);
                     if ($.isEmptyObject(data.message)) {
                         alert(data.success);
-                        // window.location = '/auth';
+                        window.location = '/teacher';
                     } else {
                         printErrorMsg(data.message);
                     }

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Point;
+use App\Models\Semester;
 use Illuminate\Http\Request;
-use App\Models\Room;
-use App\Models\Student;
-use App\Models\Subject;
 use Yajra\Datatables\Datatables;
-class PointController extends Controller
+
+class SemesterController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,21 +14,9 @@ class PointController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Point::with(['teachers', 'subjects', 'students','rooms'])->where('teacher_id', '=', auth('teacher')->user()->id)->select('points.*')->get();
+            $data = Semester::latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->editColumn('teachers', function ($data) {
-                    return $data->teachers->name;
-                })
-                ->editColumn('subjects', function ($data) {
-                    return $data->subjects->name;
-                })
-                ->editColumn('students', function ($data) {
-                    return $data->students->name;
-                })
-                ->editColumn('rooms', function ($data) {
-                    return $data->rooms->name;
-                })
                 ->addColumn('action', function ($row) {
 
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
@@ -42,11 +28,7 @@ class PointController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        $student = Student::all();
-        $subject = Subject::all();
-        $room = Room::all();
-        // $data = Room::with(['teachers','subjects'])->select('rooms.*')->get();
-        return view('teacher.point.index', ['student' => $student, 'subject' => $subject , 'room' => $room]);
+        return view('teacher.semester.index');
     }
 
     /**
@@ -62,18 +44,15 @@ class PointController extends Controller
      */
     public function store(Request $request)
     {
-        $data =  Point::updateOrCreate(
+        $data =  Semester::updateOrCreate(
             ['id' => $request->_id],
             [
-                'value' => $request->value,
-                'teacher_id' => $request->teacher_id,
-                'student_id' => $request->student_id,
-                'subject_id' => $request->subject_id,
-                'room_id' => $request->room_id,
-
+                'name' => $request->name,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
             ]
         );
-        return response()->json(['success' => 'Product successfully.', $request->all()]);
+        return response()->json(['success' => 'Product successfully.', $data]);
     }
 
     /**
@@ -81,7 +60,7 @@ class PointController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -89,8 +68,8 @@ class PointController extends Controller
      */
     public function edit(string $id)
     {
-        $point = Point::find($id);
-        return response()->json($point);
+        $product = Semester::find($id);
+        return response()->json($product);
     }
 
     /**
@@ -106,7 +85,7 @@ class PointController extends Controller
      */
     public function destroy(string $id)
     {
-        Point::find($id)->delete();
+        Semester::find($id)->delete();
         return response()->json(['success' => 'Product deleted successfully.']);
     }
 }

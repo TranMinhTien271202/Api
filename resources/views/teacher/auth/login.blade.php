@@ -75,7 +75,6 @@
                 success: function(data) {
                     console.log(data);
                     if ($.isEmptyObject(data.message)) {
-                        alert(data.success);
                         window.location = '/teacher/subject';
                     } else {
                         printErrorMsg(data.message);

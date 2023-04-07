@@ -4,7 +4,11 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\StudentLoginController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\TeacherLoginController;
+use App\Http\Controllers\PointController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\SyntheController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Middleware\CheckLogin;
 use App\Http\Middleware\CheckStudentLogin;
@@ -51,8 +55,13 @@ Route::prefix('teacher')->group(function () {
     Route::middleware([CheckTeacherLogin::class])->group(function () {
         Route::get('logout', [TeacherLoginController::class, 'logout'])->name('teacher.logout');
         Route::resource('subject', SubjectController::class);
+        Route::resource('room', RoomController::class);
+        Route::resource('point', PointController::class);
+        Route::resource('semester', SemesterController::class);
         Route::get('teacher-profile', [TeacherController::class, 'profile'])->name('teacher.profile');
         Route::post('teacher-profile', [TeacherController::class, 'profilePost'])->name('teacher.profile.post');
+
+        Route::get('syn', [SyntheController::class, 'index'])->name('teacher.syn');
     });
 });
 Route::get('auth', [AuthController::class, 'index'])->name('auth.index');

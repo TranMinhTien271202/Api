@@ -39,14 +39,6 @@
                                     placeholder="Enter Name" value="" maxlength="50" required="">
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Email</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="email" name="email"
-                                    placeholder="Enter Email" value="" maxlength="50" required="">
-                            </div>
-                        </div>
                         <div class="col-sm-offset-2 col-sm-10">
                             <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Save changes
                             </button>

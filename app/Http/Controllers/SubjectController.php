@@ -14,7 +14,7 @@ class SubjectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Subject::latest()->where('id' ,'!=' , auth('teacher')->user()->id)->get();
+            $data = Subject::latest()->get();
 
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -45,7 +45,13 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data =  Subject::updateOrCreate(
+            ['id' => $request->_id],
+            [
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+        return response()->json(['success' => 'Product successfully.', $data]);
     }
 
     /**
@@ -61,7 +67,8 @@ class SubjectController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Subject::find($id);
+        return response()->json($product);
     }
 
     /**
@@ -77,6 +84,7 @@ class SubjectController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Subject::find($id)->delete();
+        return response()->json(['success' => 'Product deleted successfully.']);
     }
 }
