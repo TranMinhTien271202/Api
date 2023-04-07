@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('room_students', function (Blueprint $table) {
             $table->id();
             $table->integer('student_id');
-            $table->integer('teacher_id');
+            $table->integer('room_id');
             $table->timestamps();
         });
     }
