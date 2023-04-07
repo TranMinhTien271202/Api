@@ -4,9 +4,11 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">name</th>
-                <th scope="col">start_date</th>
-                <th scope="col">end_date</th>
+                <th scope="col">Name</th>
+                <th scope="col">Teacher</th>
+                <th scope="col">Student</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Semester</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -16,8 +18,10 @@
                     <input type="hidden" name="id" id="id" value="{{ $item->id }}">
                     <th scope="row">{{ $item->id }}</th>
                     <td>{{ $item->name }}</td>
-                    <td>{{ date('m/d/Y', strtotime($item->start_date)) }}</td>
-                    <td>{{ date('m/d/Y', strtotime($item->end_date)) }}</td>
+                    <td>{{$item->teachers->name}}</td>
+                    <td>{{$item->students->name}}</td>
+                    <td>{{$item->subjects->name}}</td>
+                    <td>{{$item->semesters->name}}</td>
                     <td>
                         <button type="submit" class="btn btn-primary xs" id="saveBtn" value="create">show</button>
                     </td>

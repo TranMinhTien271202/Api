@@ -17,7 +17,7 @@ class RoomController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Room::with(['teachers', 'subjects', 'students','semesters'])->where('teacher_id', '=', auth('teacher')->user()->id)->select('rooms.*')->get();
+            $data = Room::with(['teachers', 'subjects','semesters'])->where('teacher_id', '=', auth('teacher')->user()->id)->select('rooms.*')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('teachers', function ($data) {
@@ -25,9 +25,6 @@ class RoomController extends Controller
                 })
                 ->editColumn('subjects', function ($data) {
                     return $data->subjects->name;
-                })
-                ->editColumn('students', function ($data) {
-                    return $data->students->name;
                 })
                 ->editColumn('semesters', function ($data) {
                     return $data->semesters->name;
@@ -43,12 +40,11 @@ class RoomController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        $student = Student::all();
         $subject = Subject::all();
         $semester = Semester::all();
         // $data = Room::with(['teachers','subjects'])->select('rooms.*')->get();
-        $data = Room::with(['teachers', 'subjects', 'students'])->select('rooms.*')->get();
-        return view('teacher.room.index', ['student' => $student, 'subject' => $subject, 'semester' => $semester, 'data' => $data]);
+        $data = Room::with(['teachers', 'subjects'])->select('rooms.*')->get();
+        return view('teacher.room.index', ['subject' => $subject, 'semester' => $semester, 'data' => $data]);
     }
 
     /**

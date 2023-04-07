@@ -13,7 +13,11 @@ class SyntheController extends Controller
         return view('teacher.synthe.index', ['data' => $data]);
     }
     public function room($id){
-            $data = Room::where('id',$id)->get();
+            $data = Room::where('semester_id',$id)->groupBy('name')->get();
             return view('teacher.synthe.room', ['data' => $data]);
+    }
+    public function student($id){
+        $data = Room::where('semester_id',$id)->groupBy('name')->get();
+        return view('teacher.synthe.student', ['data' => $data]);
     }
 }

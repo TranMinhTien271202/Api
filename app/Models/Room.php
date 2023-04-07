@@ -12,7 +12,6 @@ class Room extends Model
 
     protected $fillable = [
         'name',
-        'student_id',
         'teacher_id',
         'subject_id',
         'semester_id'
@@ -21,10 +20,6 @@ class Room extends Model
     public function teachers(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
-    }
-    public function students(): BelongsTo
-    {
-        return $this->belongsTo(Student::class, 'student_id');
     }
     public function subjects(): BelongsTo
     {

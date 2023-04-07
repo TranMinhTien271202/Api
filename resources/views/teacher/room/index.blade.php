@@ -45,18 +45,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Student</label>
-                            <div class="col-sm-12">
-                                <select name="student_id" class="form-control" id="student_id" data-show-subtext="true"
-                                    data-live-search="true">
-                                    @foreach ($student as $student)
-                                        <option selected="selected" value="{{ $student->id }}">{{ $student->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Subject</label>
                             <div class="col-sm-12">
                                 <select name="subject_id" class="form-control" id="subject_id" data-show-subtext="true"
@@ -113,9 +101,6 @@
                         data: 'name',
                     },
                     {
-                        data: 'students',
-                    },
-                    {
                         data: 'teachers',
                     },
                     {
@@ -150,7 +135,6 @@
                     $('#_id').val(data.id);
                     $('#name').val(data.name);
                     $('#teacher_id').val(data.teacher_id);
-                    $('#student_id').val(data.student_id);
                     $('#subject_id').val(data.subject_id);
                     $('#semester_id').val(data.semester_id);
                 })
