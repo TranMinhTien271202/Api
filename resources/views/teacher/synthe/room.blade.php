@@ -13,7 +13,7 @@
         <tbody>
             @foreach ($data as $item)
                 <tr>
-                    <input type="hidden" name="id" id="id" value="{{$item->id}}">
+                    <input type="hidden" name="id" id="id" value="{{ $item->id }}">
                     <th scope="row">{{ $item->id }}</th>
                     <td>{{ $item->name }}</td>
                     <td>{{ date('m/d/Y', strtotime($item->start_date)) }}</td>
@@ -36,22 +36,20 @@
         });
     </script>
     <script>
-        $('#saveBtn').click(function (e) {
+        $('#saveBtn').click(function(e) {
             e.preventDefault();
             var id = $('#id').val();
-            var url = '/teacher/syn-room/'+ id;
-
-            console.log(id,url);
-
+            var url = '/teacher/syn-room/' + id;
+            console.log(id, url);
             $.ajax({
-                url:url,
-                type:'GET',
+                url: url,
+                type: 'GET',
                 data: {
-                    id:id,
+                    id: id,
                 },
-                success:function (res) {
+                success: function(res) {
                     console.log(res);
-                    window.location = '/teacher/syn-room/'+ id
+                    window.location = '/teacher/syn-room/' + id
                 }
             })
         });

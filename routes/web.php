@@ -62,6 +62,7 @@ Route::prefix('teacher')->group(function () {
         Route::post('teacher-profile', [TeacherController::class, 'profilePost'])->name('teacher.profile.post');
 
         Route::get('syn', [SyntheController::class, 'index'])->name('teacher.syn');
+        Route::get('syn-room/{id}', [SyntheController::class, 'room'])->name('syn.room');
     });
 });
 Route::get('auth', [AuthController::class, 'index'])->name('auth.index');
