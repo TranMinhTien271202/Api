@@ -1,50 +1,63 @@
 @extends('teacher.layout.app')
 @section('content')
-    <h1>Crud</h1>
-    @if (auth('teacher')->user())
-        Xin chào {{ auth('teacher')->user()->email }}
-        <a href="{{route('teacher.logout')}}">Logout</a>
-        <a href="{{route('teacher.profile')}}">Profile</a>
-    @else
-
-    @endif
-    <br>
-    <a class="btn btn-success" href="javascript:void(0)" id="createNewProduct"> Create</a>
-    <table class="table table-bordered data-table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th width="280px">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <div class="modal fade" id="ajaxModel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modelHeading"></h4>
-                </div>
-                <div class="modal-body">
-                    <form id="productForm" name="productForm" class="form-horizontal">
-                        <input type="hidden" name="_id" id="_id">
-                        <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Name</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="name" name="name"
-                                    placeholder="Enter Name" value="" maxlength="50" required="">
-                            </div>
-                        </div>
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Create
-                            </button>
-                        </div>
-                    </form>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Subject</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Subject</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="content">
+            <div class="container-fluid">
+                <a class="btn btn-success m-2"  href="javascript:void(0)" id="createNewProduct">Create</a>
+                <table class="table table-bordered data-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th width="280px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div class="modal fade" id="ajaxModel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="modelHeading"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="productForm" name="productForm" class="form-horizontal">
+                                    <input type="hidden" name="_id" id="_id">
+                                    <div class="form-group">
+                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                placeholder="Enter Name" value="" maxlength="50" required="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Create
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 @endsection
 @section('script')
@@ -83,14 +96,14 @@
                 $('#saveBtn').val("create-product");
                 $('#_id').val('');
                 $('#productForm').trigger("reset");
-                $('#modelHeading').html("Create New Product");
+                $('#modelHeading').html("Create New Subject");
                 $('#ajaxModel').modal('show');
             });
             /*Click to Edit Button*/
             $('body').on('click', '.editProduct', function() {
                 var _id = $(this).data('id');
                 $.get("{{ route('subject.index') }}" + '/' + _id + '/edit', function(data) {
-                    $('#modelHeading').html("subject.index");
+                    $('#modelHeading').html("Edit Subject");
                     $('#saveBtn').val("edit-user");
                     $('#ajaxModel').modal('show');
                     $('#_id').val(data.id);

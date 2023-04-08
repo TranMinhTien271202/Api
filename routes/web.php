@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\TeacherLoginController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomStudentController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SyntheController;
@@ -58,10 +59,11 @@ Route::prefix('teacher')->group(function () {
         Route::resource('room', RoomController::class);
         Route::resource('point', PointController::class);
         Route::resource('semester', SemesterController::class);
+        Route::resource('room-student', RoomStudentController::class);
         Route::get('teacher-profile', [TeacherController::class, 'profile'])->name('teacher.profile');
         Route::post('teacher-profile', [TeacherController::class, 'profilePost'])->name('teacher.profile.post');
 
-        Route::get('syn', [SyntheController::class, 'index'])->name('teacher.syn');
+        Route::get('syn', [SyntheController::class, 'index'])->name('syn.index');
         Route::get('syn-room/{id}', [SyntheController::class, 'room'])->name('syn.room');
         Route::get('syn-student/{id}', [SyntheController::class, 'student'])->name('syn.student');
     });

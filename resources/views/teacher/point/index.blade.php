@@ -1,88 +1,104 @@
 @extends('teacher.layout.app')
 @section('content')
-    <h1>Crud</h1>
-    @if (auth('teacher')->user())
-        Xin chào {{ auth('teacher')->user()->email }}
-
-        <img src="" alt="">
-        <a href="{{route('teacher.logout')}}">Logout</a>
-        <a href="{{route('teacher.profile')}}">Profile</a>
-    @else
-
-    @endif
-    <br>
-    {{-- @dd($data) --}}
-    <a class="btn btn-success" href="javascript:void(0)" id="createNewProduct"> Create</a>
-    <table class="table table-bordered data-table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Point</th>
-                <th>Student</th>
-                <th>Teacher</th>
-                <th>Subject</th>
-                <th>Room</th>
-                <th width="280px">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <div class="modal fade" id="ajaxModel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modelHeading"></h4>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Room</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Room</li>
+                        </ol>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form id="productForm" name="productForm" class="form-horizontal">
-                        <input type="hidden" name="_id" id="_id">
-                        <input type="hidden" name="teacher_id" id="teacher_id" value="{{auth('teacher')->user()->id}}">
-                        <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Point</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="value" name="value"
-                                    placeholder="Enter Name" value="" maxlength="50" required="">
+            </div>
+        </div>
+        <div class="content">
+            <div class="container-fluid">
+                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"> Create</a>
+                <table class="table table-bordered data-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Point</th>
+                            <th>Student</th>
+                            <th>Teacher</th>
+                            <th>Subject</th>
+                            <th>Room</th>
+                            <th width="280px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div class="modal fade" id="ajaxModel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="modelHeading"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="productForm" name="productForm" class="form-horizontal">
+                                    <input type="hidden" name="_id" id="_id">
+                                    <input type="hidden" name="teacher_id" id="teacher_id"
+                                        value="{{ auth('teacher')->user()->id }}">
+                                    <div class="form-group">
+                                        <label for="name" class="col-sm-2 control-label">Point</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="value" name="value"
+                                                placeholder="Enter Name" value="" maxlength="50" required="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-sm-2 control-label">Student</label>
+                                        <div class="col-sm-12">
+                                            <select name="student_id" class="form-control" id="student_id"
+                                                data-show-subtext="true" data-live-search="true">
+                                                <option value="">Mời Chọn Sinh Viên</option>
+                                                @foreach ($student as $student)
+                                                    <option selected="selected" value="{{ $student->id }}">
+                                                        {{ $student->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-sm-2 control-label">Room</label>
+                                        <div class="col-sm-12">
+                                            <select name="subject_id" class="form-control" id="subject_id"
+                                                data-show-subtext="true" data-live-search="true">
+                                                <option value="">Mời Chọn Môn Học</option>
+                                                @foreach ($subject as $subject)
+                                                    <option selected="selected" value="{{ $subject->id }}">
+                                                        {{ $subject->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-sm-2 control-label">Subject</label>
+                                        <div class="col-sm-12">
+                                            <select name="room_id" class="form-control" id="room_id"
+                                                data-show-subtext="true" data-live-search="true">
+                                                <option value="">Mời Chọn Môn Học</option>
+                                                @foreach ($room as $room)
+                                                    <option selected="selected" value="{{ $room->id }}">
+                                                        {{ $room->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Create
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Student</label>
-                            <div class="col-sm-12">
-                                <select name="student_id" class="form-control" id="student_id" data-show-subtext="true" data-live-search="true">
-                                    <option value="">Mời Chọn Sinh Viên</option>
-                                    @foreach ($student as $student)
-                                        <option selected="selected" value="{{$student->id}}">{{$student->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Room</label>
-                            <div class="col-sm-12">
-                                <select name="subject_id" class="form-control" id="subject_id" data-show-subtext="true" data-live-search="true">
-                                    <option value="">Mời Chọn Môn Học</option>
-                                    @foreach ($subject as $subject)
-                                        <option selected="selected" value="{{$subject->id}}">{{$subject->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">Subject</label>
-                            <div class="col-sm-12">
-                                <select name="room_id" class="form-control" id="room_id" data-show-subtext="true" data-live-search="true">
-                                    <option value="">Mời Chọn Môn Học</option>
-                                    @foreach ($room as $room)
-                                        <option selected="selected" value="{{$room->id}}">{{$room->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Create
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

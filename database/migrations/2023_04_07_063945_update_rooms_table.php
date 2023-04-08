@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('rooms', function (Blueprint $table) {
                 $table->integer('semester_id')->nullable();
-
         });
     }
 
