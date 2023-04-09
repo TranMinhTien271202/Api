@@ -73,7 +73,7 @@
                 success: function(data) {
                     if ($.isEmptyObject(data.message)) {
                         alert(data.success);
-                        window.location = '/user';
+                        window.location = '/admin/user';
                     } else {
                         printErrorMsg(data.message);
                     }

@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\admin\ARoomController;
+use App\Http\Controllers\admin\ASemesterController;
+use App\Http\Controllers\admin\AStudentController;
+use App\Http\Controllers\admin\ASubjectController;
+use App\Http\Controllers\admin\ATeacherController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\StudentLoginController;
 use App\Http\Controllers\Auth\AuthController;
@@ -31,11 +36,22 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::middleware([CheckLogin::class])->group(function () {
-    Route::resource('user', UserController::class);
-    Route::get('auth-logout', [AuthController::class, 'logout'])->name('auth.logout');
-    Route::get('auth-profile', [AuthController::class, 'profile'])->name('auth.profile');
-    Route::post('auth-profile', [AuthController::class, 'updateProfile'])->name('auth.updateProfile');
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AuthController::class, 'index'])->name('auth.index');
+    Route::post('auth-login', [AuthController::class, 'login'])->name('auth.login');
+    Route::get('auth-register', [AuthController::class, 'register'])->name('auth.register');
+    Route::post('auth-register', [AuthController::class, 'store'])->name('auth.store');
+    Route::middleware([CheckLogin::class])->group(function () {
+        Route::resource('user', UserController::class);
+        Route::get('auth-logout', [AuthController::class, 'logout'])->name('auth.logout');
+        Route::get('auth-profile', [AuthController::class, 'profile'])->name('auth.profile');
+        Route::post('auth-profile', [AuthController::class, 'updateProfile'])->name('auth.updateProfile');
+        Route::resource('admin-room', ARoomController::class);
+        Route::resource('admin-subject', ASubjectController::class);
+        Route::resource('admin-semester', ASemesterController::class);
+        Route::resource('admin-student', AStudentController::class);
+        Route::resource('admin-teacher', ATeacherController::class);
+    });
 });
 Route::prefix('student')->group(function () {
     Route::get('/', [StudentLoginController::class, 'index'])->name('student.index');
@@ -68,7 +84,3 @@ Route::prefix('teacher')->group(function () {
         Route::get('syn-student/{id}', [SyntheController::class, 'student'])->name('syn.student');
     });
 });
-Route::get('auth', [AuthController::class, 'index'])->name('auth.index');
-Route::post('auth-login', [AuthController::class, 'login'])->name('auth.login');
-Route::get('auth-register', [AuthController::class, 'register'])->name('auth.register');
-Route::post('auth-register', [AuthController::class, 'store'])->name('auth.store');

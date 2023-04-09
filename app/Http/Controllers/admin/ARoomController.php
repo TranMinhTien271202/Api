@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Room;
+use App\Models\Semester;
+use App\Models\Subject;
 use Illuminate\Http\Request;
-use DataTables;
-use Illuminate\Support\Facades\Auth;
-
-class UserController extends Controller
+use Yajra\Datatables\Datatables;
+class ARoomController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,18 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::latest()->get();
+            $data = Room::with(['teachers', 'subjects','semesters'])->select('rooms.*')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->editColumn('teachers', function ($data) {
+                    return $data->teachers->name;
+                })
+                ->editColumn('subjects', function ($data) {
+                    return $data->subjects->name;
+                })
+                ->editColumn('semesters', function ($data) {
+                    return $data->semesters->name;
+                })
                 ->addColumn('action', function ($row) {
 
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
@@ -30,12 +39,9 @@ class UserController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        if (Auth::check()) {
-            $user = Auth::user();
-        } else {
-            $user = [];
-        }
-        return view('admin.user.index', ['user' => $user]);
+        $subject = Subject::all();
+        $semester = Semester::all();
+        return view('admin.room.index', ['subject' => $subject, 'semester' => $semester]);
     }
 
     /**
@@ -51,14 +57,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user =  User::updateOrCreate(
+        $data =  Room::updateOrCreate(
             ['id' => $request->_id],
             [
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-        return response()->json(['success' => 'Product successfully.', $request->all()]);
+                'name' => $request->name,
+                'teacher_id' => $request->teacher_id,
+                'student_id' => $request->student_id,
+                'subject_id' => $request->subject_id,
+                'semester_id' => $request->semester_id,
+            ]
+        );
+        return response()->json(['success' => 'Product successfully.', $data]);
     }
+
+    /**
+     * Display the specified resource.
+     */
     public function show(string $id)
     {
         //
@@ -67,16 +81,16 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(string $id)
     {
-        $product = User::find($id);
+        $product = Room::find($id);
         return response()->json($product);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -84,9 +98,9 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        User::find($id)->delete();
+        Room::find($id)->delete();
         return response()->json(['success' => 'Product deleted successfully.']);
     }
 }

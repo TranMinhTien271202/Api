@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Subject;
 use Illuminate\Http\Request;
-use DataTables;
-use Illuminate\Support\Facades\Auth;
+use Yajra\Datatables\Datatables;
 
-class UserController extends Controller
+class ASubjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::latest()->get();
+            $data = Subject::latest()->get();
+
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -30,12 +30,7 @@ class UserController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        if (Auth::check()) {
-            $user = Auth::user();
-        } else {
-            $user = [];
-        }
-        return view('admin.user.index', ['user' => $user]);
+        return view('admin.subject.index');
     }
 
     /**
@@ -51,14 +46,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user =  User::updateOrCreate(
+        $data =  Subject::updateOrCreate(
             ['id' => $request->_id],
             [
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-        return response()->json(['success' => 'Product successfully.', $request->all()]);
+                'name' => $request->name,
+                'email' => $request->email,
+            ]
+        );
+        return response()->json(['success' => 'Product successfully.', $data]);
     }
+
+    /**
+     * Display the specified resource.
+     */
     public function show(string $id)
     {
         //
@@ -67,16 +67,16 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(string $id)
     {
-        $product = User::find($id);
+        $product = Subject::find($id);
         return response()->json($product);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -84,9 +84,9 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        User::find($id)->delete();
+        Subject::find($id)->delete();
         return response()->json(['success' => 'Product deleted successfully.']);
     }
 }
