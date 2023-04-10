@@ -13,6 +13,8 @@ use App\Http\Controllers\PointController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomStudentController;
 use App\Http\Controllers\SemesterController;
+use App\Http\Controllers\student\SPointController;
+use App\Http\Controllers\student\SRoomController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SyntheController;
 use App\Http\Controllers\TeacherController;
@@ -59,8 +61,10 @@ Route::prefix('student')->group(function () {
     Route::get('register', [StudentLoginController::class, 'register'])->name('student.register');
     Route::post('register', [StudentLoginController::class, 'registerPost'])->name('student.register.post');
     Route::middleware([CheckStudentLogin::class])->group(function () {
-        Route::get('/student', [TeacherLoginController::class, 'index'])->name('student.student');
+        Route::get('/student', [StudentLoginController::class, 'index'])->name('student.student');
         Route::get('logout', [StudentLoginController::class, 'logout'])->name('student.logout');
+        Route::get('student-room', [SRoomController::class, 'index'])->name('student-room.index');
+        Route::get('student-point', [SPointController::class, 'index'])->name('student-point.index');
     });
 });
 Route::prefix('teacher')->group(function () {
@@ -68,7 +72,6 @@ Route::prefix('teacher')->group(function () {
     Route::post('/', [TeacherLoginController::class, 'login'])->name('teacher.login');
     Route::get('/register', [TeacherLoginController::class, 'register'])->name('teacher.register');
     Route::post('/register', [TeacherLoginController::class, 'registerPost'])->name('teacher.register.post');
-    Route::post('/1', [TeacherLoginController::class, 'registerPost1'])->name('teacher.register.1');
     Route::middleware([CheckTeacherLogin::class])->group(function () {
         Route::get('logout', [TeacherLoginController::class, 'logout'])->name('teacher.logout');
         Route::resource('subject', SubjectController::class);

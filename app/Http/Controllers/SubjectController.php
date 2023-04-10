@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Point;
+use App\Models\Room;
 use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
+
 class SubjectController extends Controller
 {
     /**
@@ -20,9 +23,9 @@ class SubjectController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
 
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
 
                     return $btn;
                 })
@@ -48,9 +51,10 @@ class SubjectController extends Controller
         $data =  Subject::updateOrCreate(
             ['id' => $request->_id],
             [
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
+                'name' => $request->name,
+                'email' => $request->email,
+            ]
+        );
         return response()->json(['success' => 'Product successfully.', $data]);
     }
 
@@ -84,7 +88,14 @@ class SubjectController extends Controller
      */
     public function destroy(string $id)
     {
-        Subject::find($id)->delete();
-        return response()->json(['success' => 'Product deleted successfully.']);
+        $room = Room::where('subject_id', $id)->first();
+        $point = Point::where('subject_id', $id)->first();
+        if ($room == null && $point == null) {
+            Subject::find($id)->delete();
+            return response()->json(['success' => 'Product deleted successfully.', 'room' => $room , 'point' => $point]);
+
+        } else {
+            return response()->json(['success' => 'Subject deleted false.', 'room' => $room , 'point' => $point]);
+        }
     }
 }

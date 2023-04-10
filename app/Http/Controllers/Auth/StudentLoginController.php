@@ -48,7 +48,7 @@ class StudentLoginController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'email' => 'required|email|unique:users',
+                'email' => 'required|email|unique:students',
                 'name' => 'required',
                 'password' => 'required'
             ],

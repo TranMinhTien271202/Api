@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Semester</h1>
+                        <h1 class="m-0">Kỳ học</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Semester</li>
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Kỳ học</li>
                         </ol>
                     </div>
                 </div>
@@ -18,15 +18,15 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"> Create</a>
+                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a>
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Start_date</th>
-                            <th>end_date</th>
-                            <th width="280px">Action</th>
+                            <th>STT</th>
+                            <th>Tên kỳ</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th>
+                            <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,28 +42,28 @@
                                 <form id="productForm" name="productForm" class="form-horizontal">
                                     <input type="hidden" name="_id" id="_id">
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <label for="name" class="col-sm form-label">Tên kỳ</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <label for="name" class="col-sm form-label">Ngày bắt đầu</label>
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="start_date" name="start_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <label for="name" class="col-sm form-label">Ngày kết thúc</label>
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="end_date" name="end_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Create
+                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Lưu
                                         </button>
                                     </div>
                                 </form>
@@ -163,6 +163,8 @@
                     type: "DELETE",
                     url: "{{ route('semester.index') }}" + '/' + _id,
                     success: function(data) {
+                        console.log(data.success);
+                        alert(data.success);
                         table.draw();
                     },
                     error: function(data) {

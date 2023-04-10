@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
 use App\Models\Semester;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
@@ -17,12 +18,19 @@ class SemesterController extends Controller
             $data = Semester::latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->editColumn('start_date', function ($data) {
+                    return date('d-m-Y', strtotime($data->start_date));
+                })
+                ->editColumn('end_date', function ($data) {
+                    return date('d-m-Y', strtotime($data->end_date));
+                })
                 ->addColumn('action', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
 
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
 
+                    $btn = $btn . ' <a href="/teacher/syn-room/ ' . $row->id . '" data-toggle="tooltip"  data-id="' . $row->id . '" class="btn btn-info btn-sm"><i class="fa-solid fa-circle-info"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -60,7 +68,6 @@ class SemesterController extends Controller
      */
     public function show(string $id)
     {
-
     }
 
     /**
@@ -85,7 +92,12 @@ class SemesterController extends Controller
      */
     public function destroy(string $id)
     {
-        Semester::find($id)->delete();
-        return response()->json(['success' => 'Product deleted successfully.']);
+        $room = Room::where('semester_id', $id)->first();
+        if ($room == null) {
+            Semester::find($id)->delete();
+            return response()->json(['success' => 'Semester deleted successfully.']);
+        }else{
+            return response()->json(['success' => 'Semester deleted false.']);
+        }
     }
 }

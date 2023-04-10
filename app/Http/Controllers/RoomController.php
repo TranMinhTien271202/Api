@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Point;
 use App\Models\Room;
+use App\Models\RoomStudent;
 use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Subject;
@@ -17,7 +19,7 @@ class RoomController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Room::with(['teachers', 'subjects','semesters'])->where('teacher_id', '=', auth('teacher')->user()->id)->select('rooms.*')->get();
+            $data = Room::with(['teachers', 'subjects', 'semesters'])->where('teacher_id', '=', auth('teacher')->user()->id)->select('rooms.*')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('teachers', function ($data) {
@@ -31,9 +33,9 @@ class RoomController extends Controller
                 })
                 ->addColumn('action', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
 
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
 
                     return $btn;
                 })
@@ -103,7 +105,13 @@ class RoomController extends Controller
      */
     public function destroy(string $id)
     {
-        Room::find($id)->delete();
-        return response()->json(['success' => 'Product deleted successfully.']);
+        $room_student = RoomStudent::where('room_id', $id)->first();
+        $point = Point::where('room_id', $id)->first();
+        if ($room_student == null && $point == null) {
+            Room::find($id)->delete();
+            return response()->json(['success' => 'Product deleted successfully.', 'point' => $point , 'room_student' => $room_student]);
+        }else{
+            return response()->json(['success' => 'Product deleted false.', 'point' => $point , 'room_student' => $room_student]);
+        }
     }
 }

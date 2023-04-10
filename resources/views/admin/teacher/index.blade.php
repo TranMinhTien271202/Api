@@ -26,6 +26,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
+                            <th>Image</th>
                             <th width="280px">Action</th>
                         </tr>
                     </thead>
@@ -90,7 +91,7 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin-student.index') }}",
+                ajax: "{{ route('admin-teacher.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
@@ -103,6 +104,13 @@
                     },
                     {
                         data: 'phone',
+                    },
+                    {
+                        data: 'image',
+                        render: function(data, type) {
+                            console.log(data);
+                            return '<img src="{{ asset('storage')}}/'+ data +'" width="50px">';
+                        }
                     },
                     {
                         data: 'action',

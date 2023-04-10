@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Room</h1>
+                        <h1 class="m-0">Điểm</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Room</li>
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Điểm</li>
                         </ol>
                     </div>
                 </div>
@@ -18,17 +18,17 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"> Create</a>
+                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a>
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Point</th>
-                            <th>Student</th>
-                            <th>Teacher</th>
-                            <th>Subject</th>
-                            <th>Room</th>
-                            <th width="280px">Action</th>
+                            <th>STT</th>
+                            <th>Điểm</th>
+                            <th>Sinh viên</th>
+                            <th>Giáo viên</th>
+                            <th>Môn học</th>
+                            <th>Lớp học</th>
+                            <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,14 +46,14 @@
                                     <input type="hidden" name="teacher_id" id="teacher_id"
                                         value="{{ auth('teacher')->user()->id }}">
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Point</label>
+                                        <label for="name" class="col-sm control-label">Điểm</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="value" name="value"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Student</label>
+                                        <label for="name" class="col-sm control-label">Sinh viên</label>
                                         <div class="col-sm-12">
                                             <select name="student_id" class="form-control" id="student_id"
                                                 data-show-subtext="true" data-live-search="true">
@@ -66,7 +66,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Room</label>
+                                        <label for="name" class="col-sm control-label">Lớp</label>
                                         <div class="col-sm-12">
                                             <select name="subject_id" class="form-control" id="subject_id"
                                                 data-show-subtext="true" data-live-search="true">
@@ -79,7 +79,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Subject</label>
+                                        <label for="name" class="col-sm control-label">Môn học</label>
                                         <div class="col-sm-12">
                                             <select name="room_id" class="form-control" id="room_id"
                                                 data-show-subtext="true" data-live-search="true">
@@ -92,7 +92,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Create
+                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Lưu
                                         </button>
                                     </div>
                                 </form>
@@ -115,7 +115,9 @@
                 }
             });
             /*Render DataTable*/
+
             var table = $('.data-table').DataTable({
+
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('point.index') }}",
@@ -199,7 +201,8 @@
                     type: "DELETE",
                     url: "{{ route('room.index') }}" + '/' + _id,
                     success: function(data) {
-                        table.draw();
+                        console.log(data);
+                        // table.draw();
                     },
                     error: function(data) {
                         console.log('Error:', data);

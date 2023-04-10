@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Subject</h1>
+                        <h1 class="m-0">Môn học</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Subject</li>
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Môn học</li>
                         </ol>
                     </div>
                 </div>
@@ -18,13 +18,13 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success m-2"  href="javascript:void(0)" id="createNewProduct">Create</a>
+                <a class="btn btn-success m-2"  href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a>
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th width="280px">Action</th>
+                            <th>STT</th>
+                            <th>Tên môn học</th>
+                            <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,14 +40,14 @@
                                 <form id="productForm" name="productForm" class="form-horizontal">
                                     <input type="hidden" name="_id" id="_id">
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <label for="name" class="col-sm-2 control-label">Tên môn học</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Create
+                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Lưu
                                         </button>
                                     </div>
                                 </form>
@@ -140,6 +140,8 @@
                     type: "DELETE",
                     url: "{{ route('subject.index') }}" + '/' + _id,
                     success: function(data) {
+                        console.log(data)
+                        alert(data.success);
                         table.draw();
                     },
                     error: function(data) {

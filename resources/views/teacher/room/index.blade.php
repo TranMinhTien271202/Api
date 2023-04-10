@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Room</h1>
+                        <h1 class="m-0">Lớp</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Room</li>
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Lớp</li>
                         </ol>
                     </div>
                 </div>
@@ -18,16 +18,16 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"> Create</a>
+                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a>
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Teacher</th>
-                            <th>Subject</th>
+                            <th>STT</th>
+                            <th>Tên lớp</th>
+                            <th>Giáo viên</th>
+                            <th>Môn học</th>
                             <th>Kỳ Học</th>
-                            <th width="280px">Action</th>
+                            <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,14 +45,14 @@
                                     <input type="hidden" name="teacher_id" id="teacher_id"
                                         value="{{ auth('teacher')->user()->id }}">
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <label for="name" class="col-sm control-label">Tên lớp</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Subject</label>
+                                        <label for="name" class="col-sm control-label">Môn học</label>
                                         <div class="col-sm-12">
                                             <select name="subject_id" class="form-control" id="subject_id"
                                                 data-show-subtext="true" data-live-search="true">
@@ -65,7 +65,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Semester</label>
+                                        <label for="name" class="col-sm control-label">Kỳ học</label>
                                         <div class="col-sm-12">
                                             <select name="semester_id" class="form-control" id="semester_id"
                                                 data-show-subtext="true" data-live-search="true">
@@ -78,7 +78,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Create
+                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Lưu
                                         </button>
                                     </div>
                                 </form>
@@ -181,6 +181,8 @@
                     type: "DELETE",
                     url: "{{ route('room.index') }}" + '/' + _id,
                     success: function(data) {
+                        console.log(data);
+                        alert(data.success);
                         table.draw();
                     },
                     error: function(data) {

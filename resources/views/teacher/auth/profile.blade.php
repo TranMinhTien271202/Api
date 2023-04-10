@@ -1,25 +1,35 @@
-@extends('admin.layout.app')
+@extends('teacher.layout.app')
 @section('content')
-    <form action="" id="form-update" method="POST" role="form" enctype="multipart/form-data">
-        <input type="text" name="id" value="{{ $data->id }}" id="id" hidden>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Name </label>
-            <input type="text" id="name" class="form-control" value="{{ $data->name }}" id="exampleInputEmail1"
-                aria-describedby="emailHelp">
+    <div class="content-wrapper">
+
+        <div class="content">
+            <div class="container-fluid">
+                <h3>
+                Thông tin của {{auth('teacher')->user()->name}}
+                </h3>
+                <form action="" id="form-update" method="POST" role="form" enctype="multipart/form-data">
+                    <input type="text" name="id" value="{{ $data->id }}" id="id" hidden>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Name </label>
+                        <input type="text" id="name" class="form-control" value="{{ $data->name }}"
+                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Phone </label>
+                        <input type="text" id="phone" class="form-control" value="{{ $data->phone }}"
+                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <img src="{{ url('storage/' . $data->image) }}" alt="" title="" width="100px" />
+                        <label for="exampleInputEmail1" class="form-label">Image </label>
+                        <input type="file" id="image" class="form-control" value="{{ $data->image }}"
+                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Phone </label>
-            <input type="text" id="phone" class="form-control" value="{{ $data->phone }}" id="exampleInputEmail1"
-                aria-describedby="emailHelp">
-        </div>
-        <div class="mb-3">
-            <img src="{{ url('storage/'.$data->image) }}" alt="" title="" width="100px" />
-            <label for="exampleInputEmail1" class="form-label">Image </label>
-            <input type="file" id="image" class="form-control" value="{{ $data->image }}"
-                id="exampleInputEmail1" aria-describedby="emailHelp">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
 @endsection
 @section('script')
     @parent
