@@ -13,8 +13,10 @@ use App\Http\Controllers\PointController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomStudentController;
 use App\Http\Controllers\SemesterController;
+use App\Http\Controllers\student\SendPointController;
 use App\Http\Controllers\student\SPointController;
 use App\Http\Controllers\student\SRoomController;
+use App\Http\Controllers\student\SStudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SyntheController;
 use App\Http\Controllers\TeacherController;
@@ -61,10 +63,14 @@ Route::prefix('student')->group(function () {
     Route::get('register', [StudentLoginController::class, 'register'])->name('student.register');
     Route::post('register', [StudentLoginController::class, 'registerPost'])->name('student.register.post');
     Route::middleware([CheckStudentLogin::class])->group(function () {
-        Route::get('/student', [StudentLoginController::class, 'index'])->name('student.student');
+        Route::get('dashboard', [StudentLoginController::class, 'dashboard'])->name('student.dashboard');
+        Route::get('student-user/{id}', [SStudentController::class, 'student'])->name('student-user.user');
+        Route::get('student-point/{id}', [SPointController::class, 'point'])->name('student-point.point');
         Route::get('logout', [StudentLoginController::class, 'logout'])->name('student.logout');
         Route::get('student-room', [SRoomController::class, 'index'])->name('student-room.index');
         Route::get('student-point', [SPointController::class, 'index'])->name('student-point.index');
+        Route::get('student-mail', [SendPointController::class, 'view'])->name('student-mail.view');
+        Route::get('send-point', [SendPointController::class, 'index'])->name('send-point.index');
     });
 });
 Route::prefix('teacher')->group(function () {

@@ -18,12 +18,15 @@ class ASemesterController extends Controller
             $data = Semester::latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->editColumn('start_date', function ($data) {
+                    return date('d-m-Y', strtotime($data->start_date));
+                })
+                ->editColumn('end_date', function ($data) {
+                    return date('d-m-Y', strtotime($data->end_date));
+                })
                 ->addColumn('action', function ($row) {
-
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
-
                     $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
-
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -53,7 +56,7 @@ class ASemesterController extends Controller
                 'end_date' => $request->end_date,
             ]
         );
-        return response()->json(['success' => 'Product successfully.', $data]);
+        return response()->json(['success' => 'Product successfully.', $data, $request->all()]);
     }
 
     /**

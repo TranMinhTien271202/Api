@@ -23,11 +23,11 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Name</th>
-                            <th>Teacher</th>
-                            <th>Subject</th>
+                            <th>Tên lớp</th>
+                            <th>Giáo viên</th>
+                            <th>Môn học</th>
                             <th>Kỳ Học</th>
-                            <th width="280px">Action</th>
+                            <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
                     <tbody>

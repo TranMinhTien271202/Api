@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Point;
 use App\Models\Student;
+use App\Models\Subject;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -75,6 +78,13 @@ class StudentLoginController extends Controller
     }
     public function logout(){
         auth('student')->logout();
-        return response()->json(['success' => 'You have been logged out']);
+        // return response()->json(['success' => 'You have been logged out']);
+        return redirect()->route('student.index');
+    }
+    public function dashboard(){
+        $teacher = Teacher::all();
+        $student = Student::all();
+        $subject = Subject::all();
+        return view('student.index', ['teacher' => $teacher, 'student' => $student, 'subject' => $subject]);
     }
 }

@@ -25,8 +25,8 @@ class Room extends Model
     {
         return $this->belongsTo(Subject::class , 'subject_id');
     }
-    public function semesters(): BelongsTo
-    {
-        return $this->belongsTo(Semester::class , 'semester_id');
-    }
+        public function semesters(): BelongsTo
+        {
+            return $this->belongsTo(Semester::class , 'semester_id');
+        }
 }

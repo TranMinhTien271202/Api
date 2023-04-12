@@ -51,6 +51,7 @@ class ASubjectController extends Controller
             [
                 'name' => $request->name,
                 'email' => $request->email,
+                'subject_code' => $request->subject_code,
             ]
         );
         return response()->json(['success' => 'Product successfully.', $data]);

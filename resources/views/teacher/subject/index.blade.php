@@ -24,6 +24,7 @@
                         <tr>
                             <th>STT</th>
                             <th>Tên môn học</th>
+                            <th>Mã môn</th>
                             <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
@@ -40,7 +41,7 @@
                                 <form id="productForm" name="productForm" class="form-horizontal">
                                     <input type="hidden" name="_id" id="_id">
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Tên môn học</label>
+                                        <label for="name" class="col-sm control-label">Tên môn học</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
@@ -82,6 +83,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'subject_code',
+                        name: 'subject_code'
                     },
                     {
                         data: 'action',

@@ -16,7 +16,6 @@ class AStudentController extends Controller
     {
         if ($request->ajax()) {
             $data = Student::latest()->get();
-
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

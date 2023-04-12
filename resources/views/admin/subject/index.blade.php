@@ -22,9 +22,10 @@
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th width="280px">Action</th>
+                            <th>Stt</th>
+                            <th>Tên môn</th>
+                            <th>Mã môn</th>
+                            <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,10 +41,17 @@
                                 <form id="productForm" name="productForm" class="form-horizontal">
                                     <input type="hidden" name="_id" id="_id">
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <label for="name" class="col-sm control-label">Name</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-sm control-label">Subject Code</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="subject_code" name="subject_code"
+                                                placeholder="Enter subject code" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -74,7 +82,7 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('subject.index') }}",
+                ajax: "{{ route('admin-subject.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
@@ -82,6 +90,9 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data:'subject_code',
                     },
                     {
                         data: 'action',
@@ -102,12 +113,13 @@
             /*Click to Edit Button*/
             $('body').on('click', '.editProduct', function() {
                 var _id = $(this).data('id');
-                $.get("{{ route('subject.index') }}" + '/' + _id + '/edit', function(data) {
+                $.get("{{ route('admin-subject.index') }}" + '/' + _id + '/edit', function(data) {
                     $('#modelHeading').html("Edit Subject");
                     $('#saveBtn').val("edit-user");
                     $('#ajaxModel').modal('show');
                     $('#_id').val(data.id);
                     $('#name').val(data.name);
+                    $('#subject_code').val(data.subject_code);
                 })
             });
             /* Create Product Code -*/
@@ -116,7 +128,7 @@
                 $(this).html('Sending..');
                 $.ajax({
                     data: $('#productForm').serialize(),
-                    url: "{{ route('subject.store') }}",
+                    url: "{{ route('admin-subject.store') }}",
                     type: "POST",
                     dataType: 'json',
                     success: function(data) {
@@ -138,7 +150,7 @@
 
                 $.ajax({
                     type: "DELETE",
-                    url: "{{ route('subject.index') }}" + '/' + _id,
+                    url: "{{ route('admin-subject.index') }}" + '/' + _id,
                     success: function(data) {
                         table.draw();
                     },

@@ -76,7 +76,7 @@
                     console.log(data);
                     if ($.isEmptyObject(data.message)) {
                         alert(data.success);
-                        window.location = '/student/student';
+                        window.location = 'student/dashboard';
                     } else {
                         printErrorMsg(data.message);
                     }

@@ -21,7 +21,7 @@ class RoomStudent extends Model
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
-    public function room() : BelongsTo
+    public function rooms() : BelongsTo
     {
         return $this->belongsTo(Room::class, 'room_id');
     }

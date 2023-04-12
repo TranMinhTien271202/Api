@@ -42,21 +42,21 @@
                                 <form id="productForm" name="productForm" class="form-horizontal">
                                     <input type="hidden" name="_id" id="_id">
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Tên kỳ</label>
+                                        <label for="name" class="col-sm control-label">Tên kỳ</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Ngày bắt đầu</label>
+                                        <label for="name" class="col-sm control-label">Ngày bắt đầu</label>
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="start_date" name="start_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Ngày kết thúc</label>
+                                        <label for="name" class="col-sm control-label">Ngày kết thúc</label>
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="end_date" name="end_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
@@ -90,7 +90,7 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('semester.index') }}",
+                ajax: "{{ route('admin-semester.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
@@ -123,7 +123,7 @@
             /*Click to Edit Button*/
             $('body').on('click', '.editProduct', function() {
                 var _id = $(this).data('id');
-                $.get("{{ route('semester.index') }}" + '/' + _id + '/edit', function(data) {
+                $.get("{{ route('admin-semester.index') }}" + '/' + _id + '/edit', function(data) {
                     $('#modelHeading').html("Update Semester");
                     $('#saveBtn').val("edit-user");
                     $('#ajaxModel').modal('show');
@@ -139,7 +139,7 @@
                 $(this).html('Sending..');
                 $.ajax({
                     data: $('#productForm').serialize(),
-                    url: "{{ route('semester.store') }}",
+                    url: "{{ route('admin-semester.store') }}",
                     type: "POST",
                     dataType: 'json',
                     success: function(data) {
@@ -161,7 +161,7 @@
 
                 $.ajax({
                     type: "DELETE",
-                    url: "{{ route('semester.index') }}" + '/' + _id,
+                    url: "{{ route('admin-semester.index') }}" + '/' + _id,
                     success: function(data) {
                         table.draw();
                     },

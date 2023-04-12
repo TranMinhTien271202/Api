@@ -176,7 +176,6 @@
             $('body').on('click', '.deleteProduct', function() {
                 var _id = $(this).data("id");
                 confirm("Are You sure want to delete !");
-
                 $.ajax({
                     type: "DELETE",
                     url: "{{ route('room.index') }}" + '/' + _id,

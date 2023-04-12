@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('room_students', function (Blueprint $table) {
-            $table->integer('room_id')->nullable();
+        Schema::table('subjects', function (Blueprint $table) {
+            $table->string('subject_code')->nullable();
         });
     }
 
