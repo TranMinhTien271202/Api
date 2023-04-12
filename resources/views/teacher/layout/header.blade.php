@@ -5,7 +5,7 @@
                 <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="{{ route('teacher.profile') }}" class="d-block">{{ auth('teacher')->user()->email }}</a>
+                <a href="{{ route('teacher.profile') }}" class="d-block">{{ auth('teacher')->user()->name }}</a>
             </div>
         </div>
         <div class="form-inline">

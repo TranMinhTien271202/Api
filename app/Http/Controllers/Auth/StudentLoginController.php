@@ -85,6 +85,12 @@ class StudentLoginController extends Controller
         $teacher = Teacher::all();
         $student = Student::all();
         $subject = Subject::all();
-        return view('student.index', ['teacher' => $teacher, 'student' => $student, 'subject' => $subject]);
+        $data = Point::selectRaw('points.*, COALESCE(sum(points.value) ,0) total')
+        ->selectRaw('sum(value) / count(value) as total')
+        ->groupBy('points.student_id')
+        ->orderBy('total','desc')
+        ->take(5)
+        ->get();
+        return view('student.index', ['teacher' => $teacher, 'student' => $student, 'subject' => $subject, 'data' => $data]);
     }
 }

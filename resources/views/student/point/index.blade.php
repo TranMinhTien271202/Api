@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Điểm</h1>
+                        <h1 class="m-0">Danh sách môn</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -23,6 +23,7 @@
                         <tr>
                             <th>STT</th>
                             <th>Môn học</th>
+                            <th>Mã môn</th>
                             <th>Quản lý</th>
                         </tr>
                     </thead>
@@ -55,8 +56,12 @@
                         data: 'subject',
                     },
                     {
+                        data:'subject-code'
+                    },
+                    {
                         data: 'action',
                     },
+
                 ]
             });
         });

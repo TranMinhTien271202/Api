@@ -28,7 +28,7 @@
                         <!-- small box -->
                         <div class="small-box bg-info">
                             <div class="inner">
-                                <h3>{{count($teacher)}}</h3>
+                                <h3>{{ count($teacher) }}</h3>
 
                                 <p>Giáo viên</p>
                             </div>
@@ -44,7 +44,7 @@
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
-                                <h3>{{count($student)}}</h3>
+                                <h3>{{ count($student) }}</h3>
                                 <p>Học viên</p>
                             </div>
                             <div class="icon">
@@ -59,14 +59,13 @@
                         <!-- small box -->
                         <div class="small-box bg-warning">
                             <div class="inner">
-                                <h3>{{count($subject)}}</h3>
+                                <h3>{{ count($subject) }}</h3>
                                 <p>Bộ môn</p>
                             </div>
                             <div class="icon">
                                 <i class="fa-solid fa-book"></i>
                             </div>
-                            <a href="#" class="small-box-footer">chi tiết<i
-                                    class="fas fa-arrow-circle-right"></i></a>
+                            <a href="#" class="small-box-footer">chi tiết<i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -80,7 +79,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">
                                     <i class="fas fa-chart-pie mr-1"></i>
-                                    TOP 10 Sinh Viên Xuất Sắc
+                                    TOP 5 Sinh Viên Xuất Sắc
                                 </h3>
                             </div>
                             <div class="card-body">
@@ -93,31 +92,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>No1</td>
-                                            <td>Trần Minh Tiến</td>
-                                            <td>10</td>
-                                        </tr>
-                                        <tr>
-                                            <td>No2 </td>
-                                            <td>Nguyễn Văn Hùng</td>
-                                            <td>9.99</td>
-                                        </tr>
-                                        <tr>
-                                            <td>No3 </td>
-                                            <td>Lê Duy Khánh</td>
-                                            <td>9.98</td>
-                                        </tr>
-                                        <tr>
-                                            <td>No4 </td>
-                                            <td>Vũ Công Tuyền</td>
-                                            <td>9.97</td>
-                                        </tr>
-                                        <tr>
-                                            <td>No5 </td>
-                                            <td>Triệu Đức</td>
-                                            <td>1</td>
-                                        </tr>
+                                        @foreach ($data as $item)
+                                            <tr>
+                                                <td>No {{$item->id}}</td>
+                                                <td>{{$item->students->name}}</td>
+                                                <td>{{$item->total}}</td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
