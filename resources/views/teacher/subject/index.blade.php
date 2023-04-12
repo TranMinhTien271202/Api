@@ -18,7 +18,8 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success m-2"  href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a>
+                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"><i
+                        class="fa-solid fa-plus"></i></a>
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
@@ -45,6 +46,16 @@
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                            <span class="text-danger error-text name_err"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-sm control-label">Mã môn học</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="subject_code" name="subject_code"
+                                                placeholder="Enter Subject Code" value="" maxlength="50"
+                                                required="">
+                                            <span class="text-danger error-text subject_code_err"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -113,6 +124,7 @@
                     $('#ajaxModel').modal('show');
                     $('#_id').val(data.id);
                     $('#name').val(data.name);
+                    $('#subject_code').val(data.subject_code);
                 })
             });
             /* Create Product Code -*/
@@ -126,9 +138,33 @@
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
-                        $('#productForm').trigger("reset");
-                        $('#ajaxModel').modal('hide');
-                        table.draw();
+                        if ($.isEmptyObject(data.message)) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave', Swal
+                                        .resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.success
+                            })
+                            setTimeout(() => {
+                                $('#productForm').trigger("reset");
+                                $('#ajaxModel').modal('hide');
+                                table.draw();
+                            }, 300);
+                        } else {
+                            printErrorMsg(data.message);
+                        }
+
                     },
                     error: function(data) {
                         console.log('Error:', data);
@@ -138,23 +174,53 @@
             });
             /* Delete Product Code */
             $('body').on('click', '.deleteProduct', function() {
-                var _id = $(this).data("id");
-                confirm("Are You sure want to delete !");
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "{{ route('subject.index') }}" + '/' + _id,
-                    success: function(data) {
-                        console.log(data)
-                        alert(data.success);
-                        table.draw();
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var _id = $(this).data("id");
+                        $.ajax({
+                            type: "DELETE",
+                            url: "{{ route('subject.index') }}" + '/' + _id,
+                            success: function(data) {
+                                console.log(data)
+                                if (data.status == 1) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.success,
+                                        'success'
+                                    )
+                                    table.draw();
+                                } else {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.error,
+                                        'error'
+                                    )
+                                }
+                                table.draw();
+                            },
+                            error: function(data) {
+                                console.log('Error:', data);
+                            }
+                        });
                     }
-                });
+                })
             });
         });
+
+        function printErrorMsg(msg) {
+            $.each(msg, function(key, value) {
+                console.log(key);
+                $('.' + key + '_err').text(value);
+            });
+        }
     </script>
 @endsection
 

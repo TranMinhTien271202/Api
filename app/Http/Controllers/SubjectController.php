@@ -7,6 +7,7 @@ use App\Models\Room;
 use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
 
 class SubjectController extends Controller
@@ -48,14 +49,33 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        $data =  Subject::updateOrCreate(
-            ['id' => $request->_id],
+        $validator = Validator::make(
+            $request->all(),
             [
-                'name' => $request->name,
-                'email' => $request->email,
+                'name' => 'required',
+                'subject_code' => 'required'
+            ],
+            [
+                'name.required' => "Tên môn học không được để trống.",
+                'subject_code.required' => 'Mã môn học không được để trống.',
             ]
         );
-        return response()->json(['success' => 'Product successfully.', $data]);
+        if ($validator->passes()) {
+            if ($request->ajax()) {
+                $data =  Subject::updateOrCreate(
+                    ['id' => $request->_id],
+                    [
+                        'name' => $request->name,
+                        'email' => $request->email,
+                        'subject_code' => $request->subject_code,
+                    ]
+                );
+                return response()->json(['success' => 'Product successfully.', $data]);
+            }
+        }
+        return response()->json([
+            'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+        ]);
     }
 
     /**
@@ -92,10 +112,9 @@ class SubjectController extends Controller
         $point = Point::where('subject_id', $id)->first();
         if ($room == null && $point == null) {
             Subject::find($id)->delete();
-            return response()->json(['success' => 'Product deleted successfully.', 'room' => $room , 'point' => $point]);
-
+            return response()->json(['status' => 1, 'success' => 'Xóa thành công.']);
         } else {
-            return response()->json(['success' => 'Subject deleted false.', 'room' => $room , 'point' => $point]);
+            return response()->json(['status' => 2, 'error' => 'Xóa không hành công.']);
         }
     }
 }

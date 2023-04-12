@@ -31,9 +31,9 @@ class TeacherLoginController extends Controller
         if ($validator->passes()) {
             if ($request->ajax()) {
                 if (auth('teacher')->attempt(['email' => $request->email, 'password' => $request->password])) {
-                    return response()->json(['success' => 'Đăng nhập thành công.']);
+                    return response()->json([ 'status' => 1 ,'success' => 'Đăng nhập thành công.']);
                 }
-                return response()->json(['success' => 'Đăng nhập không thành công.']);
+                return response()->json([ 'status' => 2 ,'error' => 'Đăng nhập không thành công.']);
             }
         }
         return response()->json([
