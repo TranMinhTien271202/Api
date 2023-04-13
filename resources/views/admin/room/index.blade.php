@@ -42,8 +42,7 @@
                             <div class="modal-body">
                                 <form id="productForm" name="productForm" class="form-horizontal">
                                     <input type="hidden" name="_id" id="_id">
-                                    <input type="hidden" name="teacher_id" id="teacher_id"
-                                        value="">
+                                    <input type="hidden" name="teacher_id" id="teacher_id" value="">
                                     <div class="form-group">
                                         <label for="name" class="col-sm-2 control-label">Name</label>
                                         <div class="col-sm-12">
@@ -162,9 +161,32 @@
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
-                        $('#productForm').trigger("reset");
-                        $('#ajaxModel').modal('hide');
-                        table.draw();
+                        if ($.isEmptyObject(data.message)) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave', Swal
+                                        .resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.success
+                            })
+                            setTimeout(() => {
+                                $('#productForm').trigger("reset");
+                                $('#ajaxModel').modal('hide');
+                                table.draw();
+                            }, 300);
+                        } else {
+                            printErrorMsg(data.message);
+                        }
                     },
                     error: function(data) {
                         console.log('Error:', data);
@@ -174,19 +196,31 @@
             });
             /* Delete Product Code */
             $('body').on('click', '.deleteProduct', function() {
-                var _id = $(this).data("id");
-                confirm("Are You sure want to delete !");
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "{{ route('admin-room.index') }}" + '/' + _id,
-                    success: function(data) {
-                        table.draw();
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
+                Swal.fire({
+                    title: 'Are you sure you want to delete?',
+                    text: "You won't be able to undo this once you do!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var _id = $(this).data("id");
+                        $.ajax({
+                            type: "DELETE",
+                            url: "{{ route('admin-room.index') }}" + '/' + _id,
+                            success: function(data) {
+                                table.draw();
+                            },
+                            error: function(data) {
+                                console.log('Error:', data);
+                            }
+                        });
                     }
-                });
+                })
+
+
             });
         });
     </script>

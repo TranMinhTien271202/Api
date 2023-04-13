@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Room;
 use App\Models\Semester;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
 
 class ASemesterController extends Controller
@@ -27,6 +29,7 @@ class ASemesterController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
                     $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
+                    $btn = $btn . ' <a href="/admin/admin-add-student/' . $row->id . '" data-toggle="tooltip" class="btn btn-info btn-sm"><i class="fa-solid fa-circle-info"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -48,15 +51,35 @@ class ASemesterController extends Controller
      */
     public function store(Request $request)
     {
-        $data =  Semester::updateOrCreate(
-            ['id' => $request->_id],
+        $validator = Validator::make(
+            $request->all(),
             [
-                'name' => $request->name,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
+                'name' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required'
+            ],
+            [
+                'name.required' => "Tên môn học không được để trống.",
+                'start_date.required' => 'Mã môn học không được để trống.',
+                'end_date.required' => 'Mã môn học không được để trống.',
             ]
         );
-        return response()->json(['success' => 'Product successfully.', $data, $request->all()]);
+        if ($validator->passes()) {
+            if ($request->ajax()) {
+                $data =  Semester::updateOrCreate(
+                    ['id' => $request->_id],
+                    [
+                        'name' => $request->name,
+                        'start_date' => $request->start_date,
+                        'end_date' => $request->end_date,
+                    ]
+                );
+                return response()->json(['success' => 'Product successfully.', $data, $request->all()]);
+            }
+        }
+        return response()->json([
+            'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+        ]);
     }
 
     /**
@@ -89,7 +112,12 @@ class ASemesterController extends Controller
      */
     public function destroy(string $id)
     {
-        Semester::find($id)->delete();
-        return response()->json(['success' => 'Product deleted successfully.']);
+        $room = Room::where('semester_id', $id)->first();
+        if ($room == null) {
+            Semester::find($id)->delete();
+            return response()->json(['status' => 1, 'success' => 'Xóa thành công.']);
+        } else {
+            return response()->json(['status' => 2, 'error' => 'Xóa không hành công.']);
+        }
     }
 }

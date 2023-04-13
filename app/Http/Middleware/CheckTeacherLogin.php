@@ -18,6 +18,6 @@ class CheckTeacherLogin
         if (auth('teacher')->user()) {
             return $next($request);
         }
-        return back();
+        return redirect()->route('teacher.login');
     }
 }

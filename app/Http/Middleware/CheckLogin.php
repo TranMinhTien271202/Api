@@ -20,6 +20,6 @@ class CheckLogin
         if (Auth::user()) {
             return $next($request);
         }
-        return back();
+        return redirect()->route('auth.index');
     }
 }

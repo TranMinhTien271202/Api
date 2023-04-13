@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Point;
 use App\Models\Room;
+use App\Models\RoomStudent;
 use App\Models\Semester;
 use App\Models\Subject;
 use Illuminate\Http\Request;
@@ -67,7 +69,7 @@ class ARoomController extends Controller
                 'semester_id' => $request->semester_id,
             ]
         );
-        return response()->json(['success' => 'Product successfully.', $data]);
+        return response()->json(['status' => 1 ,'success' => 'Product successfully.', $data]);
     }
 
     /**
@@ -100,7 +102,13 @@ class ARoomController extends Controller
      */
     public function destroy(string $id)
     {
-        Room::find($id)->delete();
-        return response()->json(['success' => 'Product deleted successfully.']);
+        $room_student = RoomStudent::where('room_id', $id)->first();
+        $point = Point::where('room_id', $id)->first();
+        if ($room_student == null && $point == null) {
+            Room::find($id)->delete();
+            return response()->json(['status' => 1, 'success' => 'Xóa thành công.']);
+        }else{
+            return response()->json(['status' => 2, 'success' => 'Xóa không thành công.']);
+        }
     }
 }

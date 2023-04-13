@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\AddstudentController;
 use App\Http\Controllers\admin\ARoomController;
 use App\Http\Controllers\admin\ASemesterController;
 use App\Http\Controllers\admin\AStudentController;
@@ -55,6 +56,8 @@ Route::prefix('admin')->group(function () {
         Route::resource('admin-semester', ASemesterController::class);
         Route::resource('admin-student', AStudentController::class);
         Route::resource('admin-teacher', ATeacherController::class);
+        Route::get('admin-add-student', [AddstudentController::class, 'index'])->name('admin.addStudent');
+        Route::post('admin-add-student', [AddstudentController::class, 'store'])->name('admin.addStudent.store');
     });
 });
 Route::prefix('student')->group(function () {

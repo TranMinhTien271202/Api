@@ -18,6 +18,6 @@ class CheckStudentLogin
         if (auth('student')->user()) {
             return $next($request);
         }
-        return back();
+        return redirect()->route('student.index');
     }
 }

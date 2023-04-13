@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\Semester;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
 
 class SemesterController extends Controller
@@ -25,12 +27,13 @@ class SemesterController extends Controller
                     return date('d-m-Y', strtotime($data->end_date));
                 })
                 ->addColumn('action', function ($row) {
+                    dd($row);
 
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
 
                     $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
 
-                    $btn = $btn . ' <a href="/teacher/syn-room/ ' . $row->id . '" data-toggle="tooltip"  data-id="' . $row->id . '" class="btn btn-info btn-sm"><i class="fa-solid fa-circle-info"></i></a>';
+                    $btn = $btn . ' <a href="/teacher/syn-room/'+ $row->id +'"  class="btn btn-info btn-sm"><i class="fa-solid fa-circle-info"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -52,15 +55,37 @@ class SemesterController extends Controller
      */
     public function store(Request $request)
     {
-        $data =  Semester::updateOrCreate(
-            ['id' => $request->_id],
+
+        $validator = Validator::make(
+            $request->all(),
             [
-                'name' => $request->name,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
+                'day' => Carbon::now()->format('d-m-Y'),
+                'name' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required'
+            ],
+            [
+                'name.required' => "Tên môn học không được để trống.",
+                'start_date.required' => 'Mã môn học không được để trống.',
+                'end_date.required' => 'Mã môn học không được để trống.',
             ]
         );
-        return response()->json(['success' => 'Product successfully.', $data]);
+        if ($validator->passes()) {
+            if ($request->ajax()) {
+                $data =  Semester::updateOrCreate(
+                    ['id' => $request->_id],
+                    [
+                        'name' => $request->name,
+                        'start_date' => $request->start_date,
+                        'end_date' => $request->end_date,
+                    ]
+                );
+                return response()->json(['success' => 'Product successfully.', $data, $request->all()]);
+            }
+        }
+        return response()->json([
+            'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+        ]);
     }
 
     /**
@@ -95,9 +120,9 @@ class SemesterController extends Controller
         $room = Room::where('semester_id', $id)->first();
         if ($room == null) {
             Semester::find($id)->delete();
-            return response()->json(['success' => 'Semester deleted successfully.']);
-        }else{
-            return response()->json(['success' => 'Semester deleted false.']);
+            return response()->json(['status' => 1, 'success' => 'Xóa thành công.']);
+        } else {
+            return response()->json(['status' => 2, 'error' => 'Xóa không hành công.']);
         }
     }
 }

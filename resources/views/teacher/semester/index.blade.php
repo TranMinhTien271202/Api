@@ -18,7 +18,8 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a>
+                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"><i
+                        class="fa-solid fa-plus"></i></a>
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
@@ -46,6 +47,7 @@
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                            <span class="text-danger error-text name_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -53,6 +55,7 @@
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="start_date" name="start_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                            <span class="text-danger error-text start_date_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -60,6 +63,7 @@
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="end_date" name="end_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                            <span class="text-danger error-text end_date_err"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -144,9 +148,32 @@
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
-                        $('#productForm').trigger("reset");
-                        $('#ajaxModel').modal('hide');
-                        table.draw();
+                        if ($.isEmptyObject(data.message)) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave', Swal
+                                        .resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.success
+                            })
+                            setTimeout(() => {
+                                $('#productForm').trigger("reset");
+                                $('#ajaxModel').modal('hide');
+                                table.draw();
+                            }, 300);
+                        } else {
+                            printErrorMsg(data.message);
+                        }
                     },
                     error: function(data) {
                         console.log('Error:', data);
@@ -156,23 +183,52 @@
             });
             /* Delete Product Code */
             $('body').on('click', '.deleteProduct', function() {
-                var _id = $(this).data("id");
-                confirm("Are You sure want to delete !");
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "{{ route('semester.index') }}" + '/' + _id,
-                    success: function(data) {
-                        console.log(data.success);
-                        alert(data.success);
-                        table.draw();
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
+                Swal.fire({
+                    title: 'Are you sure you want to delete?',
+                    text: "You won't be able to undo this once you do!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var _id = $(this).data("id");
+                        $.ajax({
+                            type: "DELETE",
+                            url: "{{ route('semester.index') }}" + '/' + _id,
+                            success: function(data) {
+                                if (data.status == 1) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.success,
+                                        'success'
+                                    )
+                                    table.draw();
+                                } else {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.error,
+                                        'error'
+                                    )
+                                }
+                                table.draw();
+                            },
+                            error: function(data) {
+                                console.log('Error:', data);
+                            }
+                        });
                     }
-                });
+                })
             });
         });
+
+        function printErrorMsg(msg) {
+            $.each(msg, function(key, value) {
+                console.log(key);
+                $('.' + key + '_err').text(value);
+            });
+        }
     </script>
 @endsection
 

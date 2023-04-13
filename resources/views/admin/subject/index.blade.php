@@ -18,7 +18,7 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success m-2"  href="javascript:void(0)" id="createNewProduct">Create</a>
+                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct">Create</a>
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
@@ -51,7 +51,8 @@
                                         <label for="name" class="col-sm control-label">Subject Code</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="subject_code" name="subject_code"
-                                                placeholder="Enter subject code" value="" maxlength="50" required="">
+                                                placeholder="Enter subject code" value="" maxlength="50"
+                                                required="">
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -92,7 +93,7 @@
                         name: 'name'
                     },
                     {
-                        data:'subject_code',
+                        data: 'subject_code',
                     },
                     {
                         data: 'action',
@@ -133,9 +134,32 @@
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
-                        $('#productForm').trigger("reset");
-                        $('#ajaxModel').modal('hide');
-                        table.draw();
+                        if ($.isEmptyObject(data.message)) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave', Swal
+                                        .resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.success
+                            })
+                            setTimeout(() => {
+                                $('#productForm').trigger("reset");
+                                $('#ajaxModel').modal('hide');
+                                table.draw();
+                            }, 300);
+                        } else {
+                            printErrorMsg(data.message);
+                        }
                     },
                     error: function(data) {
                         console.log('Error:', data);
@@ -146,18 +170,43 @@
             /* Delete Product Code */
             $('body').on('click', '.deleteProduct', function() {
                 var _id = $(this).data("id");
-                confirm("Are You sure want to delete !");
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "{{ route('admin-subject.index') }}" + '/' + _id,
-                    success: function(data) {
-                        table.draw();
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var _id = $(this).data("id");
+                        $.ajax({
+                            type: "DELETE",
+                            url: "{{ route('admin-subject.index') }}" + '/' + _id,
+                            success: function(data) {
+                                if (data.status == 1) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.success,
+                                        'success'
+                                    )
+                                    table.draw();
+                                } else {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.error,
+                                        'error'
+                                    )
+                                }
+                                table.draw();
+                            },
+                            error: function(data) {
+                                console.log('Error:', data);
+                            }
+                        });
                     }
-                });
+                })
             });
         });
     </script>

@@ -70,6 +70,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.addStudent') }}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Thêm học viên
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

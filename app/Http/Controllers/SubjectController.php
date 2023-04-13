@@ -66,7 +66,6 @@ class SubjectController extends Controller
                     ['id' => $request->_id],
                     [
                         'name' => $request->name,
-                        'email' => $request->email,
                         'subject_code' => $request->subject_code,
                     ]
                 );
