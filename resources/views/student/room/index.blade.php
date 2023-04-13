@@ -1,4 +1,15 @@
 @extends('student.layout.app')
+@section('css')
+    <style>
+        .dataTables_length {
+            line-height: 60px;
+        }
+
+        .dataTables_info {
+            line-height: 40px
+        }
+    </style>
+@endsection
 @section('content')
     <div class="content-wrapper">
         <div class="content-header">
@@ -17,14 +28,16 @@
             </div>
         </div>
         <div class="content">
-            <select name="semester" class="form-select" id="semester">
-                <option value="">Mời chọn kỳ học</option>
-                @foreach ($semester as $row)
-                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                @endforeach
-            </select>
-            <button type="submit" id="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
             <div class="container-fluid">
+                <div class="sele">
+                    <select name="semester" class="form-select" id="semester">
+                        <option value="">Mời chọn kỳ học</option>
+                        @foreach ($semester as $row)
+                            <option value="{{ $row->id }}">{{ $row->name }}</option>
+                        @endforeach
+                    </select>
+                    <button type="submit" id="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
                 <table class="table table-bordered data-table" id="data-table">
                     <thead>
                         <tr>
@@ -57,6 +70,10 @@
                 var dataTable = $('#data-table').DataTable({
                     processing: true,
                     serverSide: true,
+                    dom: '<"float-left"B><"float-right"f>rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
+                    buttons: [
+                        'copy', 'excel', 'pdf'
+                    ],
                     ajax: {
                         url: "{{ route('student-room.index') }}",
                         data: {

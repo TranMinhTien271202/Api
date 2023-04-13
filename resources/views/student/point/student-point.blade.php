@@ -26,9 +26,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data as $row)
+                        @foreach ($data as $key=>$row)
                             <tr>
-                                <td>{{ $row->id }}</td>
+                                <td>{{ $key+1 }}</td>
                                 <td>{{ $row->value }}</td>
                             </tr>
                         @endforeach

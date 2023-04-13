@@ -1,98 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Laravel Ajax CRUD Tutorial Example - ItSolutionStuff.com</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
-    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('dist/css/login.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+        integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <center><h1>Student Register</h1></center>
-        <form style="width:40%;margin:auto" id="LoginForm" name="LoginForm" method="POST">
-            <input type="text" name="_token" id="_token" value="{{ csrf_token() }}" hidden>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Họ và tên</label>
-                <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp"
-                    placeholder="Mời nhập họ và tên">
+    <h2>Đăng nhập sinh viên</h2>
+    <div class="container" id="container">
+        <div class="form-container sign-in-container">
+            <form>
+                <h1>Tạo tài khoản</h1>
+                <span>Vui lòng sử dụng email của bạn để đăng ký</span>
+                <input type="text" id="name" placeholder="Name" />
                 <span class="text-danger error-text name_err"></span>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp"
-                    placeholder="Mời nhập email">
+                <input type="email" id="email" placeholder="Email" />
                 <span class="text-danger error-text email_err"></span>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Mật khẩu</label>
-                <input type="password" class="form-control" name="password" id="password"
-                    placeholder="Mời nhập mật khẩu">
+                <input type="password" id="password" placeholder="Password" />
                 <span class="text-danger error-text password_err"></span>
+                <button type="submit" id="btn-create">Đăng ký</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-right">
+                    <h1>Nếu bạn đã có tài khoản</h1>
+                    <p>Hãy đăng nhập để đồng hành cùng chúng tôi.</p>
+                    <a href="/teacher"><button class="ghost" id="signUp">Đăng nhập</button></a>
+                </div>
             </div>
-            <button type="submit" id="btn-create" class="btn btn-primary">Register</button>
-            <br>
-            Đã có tài khoản vui lòng đăng nhập tại đây
-            <a href="{{route('teacher.index')}}">Login</a>
-        </form>
+        </div>
     </div>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            /*Pass Header Token*/
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('#btn-create').click(function(e) {
+                e.preventDefault();
+                $(this).html('loading...');
+                var _token = $("input[name='_token']").val();
+                var url = "{{ route('teacher.register.post') }}"
+                var email = $('#email').val();
+                var password = $('#password').val();
+                var name = $('#name').val();
+                console.log(url, email, password, name);
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        email: email,
+                        password: password,
+                        name: name,
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if ($.isEmptyObject(data.message)) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave', Swal
+                                        .resumeTimer)
+                                },
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.success
+                            })
+                            setTimeout(() => {
+                                window.location = '/teacher';
+                            }, 800);
+                        } else {
+                            printErrorMsg(data.message);
+                        }
+                        // alert(data.success);
 
-<script type="text/javascript">
-    $(function() {
-        /*Pass Header Token*/
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+
+                })
+            });
+            function printErrorMsg(msg) {
+                $.each(msg, function(key, value) {
+                    console.log(key);
+                    $('.' + key + '_err').text(value);
+                });
             }
         });
-        $('#btn-create').click(function(e) {
-            e.preventDefault();
-            $(this).html('loading...');
-            var _token = $("input[name='_token']").val();
-            var url = "{{ route('teacher.register.post') }}"
-            var email = $('#email').val();
-            var password = $('#password').val();
-            var name = $('#name').val();
-            console.log(url, email, password, name);
-            $.ajax({
-                url: url,
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    email: email,
-                    password: password,
-                    name: name,
-                },
-                success: function(data) {
-                    console.log(data);
-                    if ($.isEmptyObject(data.message)) {
-                        alert(data.success);
-                        window.location = '/teacher';
-                    } else {
-                        printErrorMsg(data.message);
-                    }
-                    // alert(data.success);
-
-                }
-
-            })
-        });
-
-        function printErrorMsg(msg) {
-            $.each(msg, function(key, value) {
-                console.log(key);
-                $('.' + key + '_err').text(value);
-            });
-        }
-    });
-</script>
+    </script>
+</body>
 
 </html>

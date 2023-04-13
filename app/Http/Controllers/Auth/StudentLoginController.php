@@ -22,12 +22,13 @@ class StudentLoginController extends Controller
             $request->all(),
             [
                 'email' => 'required|email',
-                'password' => 'required'
+                'password' => 'required|min:6'
             ],
             [
                 'email.required' => "Email không được để trống.",
                 'email.email' => "Email không đúng định dạng.",
                 'password.required' => 'Mật khẩu không được để trống.',
+                'password.min' => "Mật khẩu phải lớn hơn 6 ký tự.",
             ]
         );
         if ($validator->passes()) {
@@ -53,14 +54,15 @@ class StudentLoginController extends Controller
             [
                 'email' => 'required|email|unique:students',
                 'name' => 'required',
-                'password' => 'required'
+                'password' => 'required:min6'
             ],
             [
                 'email.required' => "Email không được để trống.",
                 'email.email' => "Email không đúng định dạng.",
                 'email.unique' => "Email đã tồn tại",
                 'password.required' => 'Mật khẩu không được để trống.',
-                'name.required' => 'Tên không được để trống.'
+                'name.required' => 'Tên không được để trống.',
+                'password.min' => "Mật khẩu phải lớn hơn 6 ký tự.",
             ]
         );
         if ($validator->passes()) {

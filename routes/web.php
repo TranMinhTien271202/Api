@@ -62,7 +62,7 @@ Route::prefix('admin')->group(function () {
 });
 Route::prefix('student')->group(function () {
     Route::get('/', [StudentLoginController::class, 'index'])->name('student.index');
-    Route::post('/', [StudentLoginController::class, 'login'])->name('student.login.post');
+    Route::post('login', [StudentLoginController::class, 'login'])->name('student.login.post');
     Route::get('register', [StudentLoginController::class, 'register'])->name('student.register');
     Route::post('register', [StudentLoginController::class, 'registerPost'])->name('student.register.post');
     Route::middleware([CheckStudentLogin::class])->group(function () {
