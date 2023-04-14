@@ -71,7 +71,7 @@ class StudentLoginController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
-            return response()->json(['success' => 'Product saved successfully.', $student]);
+            return response()->json(['success' => 'Đăng ký thành công.', $student]);
         }
 
         return response()->json([
@@ -80,15 +80,13 @@ class StudentLoginController extends Controller
     }
     public function logout(){
         auth('student')->logout();
-        // return response()->json(['success' => 'You have been logged out']);
         return redirect()->route('student.index');
     }
     public function dashboard(){
         $teacher = Teacher::all();
         $student = Student::all();
         $subject = Subject::all();
-        $data = Point::selectRaw('points.*, COALESCE(sum(points.value) ,0) total')
-        ->selectRaw('sum(value) / count(value) as total')
+        $data = Point::selectRaw('points.*, sum(value) / count(value) as total')
         ->groupBy('points.student_id')
         ->orderBy('total','desc')
         ->take(5)

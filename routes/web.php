@@ -47,6 +47,7 @@ Route::prefix('admin')->group(function () {
     Route::get('auth-register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('auth-register', [AuthController::class, 'store'])->name('auth.store');
     Route::middleware([CheckLogin::class])->group(function () {
+        Route::get('admin-dashboard', [AuthController::class, 'dashboard'])->name('admin.dashboard');
         Route::resource('user', UserController::class);
         Route::get('auth-logout', [AuthController::class, 'logout'])->name('auth.logout');
         Route::get('auth-profile', [AuthController::class, 'profile'])->name('auth.profile');
@@ -82,6 +83,7 @@ Route::prefix('teacher')->group(function () {
     Route::get('/register', [TeacherLoginController::class, 'register'])->name('teacher.register');
     Route::post('/register', [TeacherLoginController::class, 'registerPost'])->name('teacher.register.post');
     Route::middleware([CheckTeacherLogin::class])->group(function () {
+        Route::get('teacher-dashboard', [TeacherLoginController::class, 'dashboard'])->name('teacher.dashboard');
         Route::get('logout', [TeacherLoginController::class, 'logout'])->name('teacher.logout');
         Route::resource('subject', SubjectController::class);
         Route::resource('room', RoomController::class);

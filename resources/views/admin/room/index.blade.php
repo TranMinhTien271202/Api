@@ -42,7 +42,6 @@
                             <div class="modal-body">
                                 <form id="productForm" name="productForm" class="form-horizontal">
                                     <input type="hidden" name="_id" id="_id">
-                                    <input type="hidden" name="teacher_id" id="teacher_id" value="">
                                     <div class="form-group">
                                         <label for="name" class="col-sm-2 control-label">Name</label>
                                         <div class="col-sm-12">
@@ -63,6 +62,27 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-sm-2 control-label">Subject</label>
+                                        <div class="col-sm-12">
+                                            <select name="teacher_id" class="form-control" id="teacher_id"
+                                                data-show-subtext="true" data-live-search="true">
+                                                @foreach ($teacher as $row)
+                                                    <option selected="selected" value="{{ $row->id }}">
+                                                        {{ $row->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {{-- <select class="select2" id="semester_id" data-placeholder="Select a State"
+                                        style="width:436px">
+                                        @foreach ($semester as $row)
+                                            <option selected="selected" value="{{ $row->id }}">
+                                                {{ $row->name }}
+                                            </option>
+                                        @endforeach
+                                    </select> --}}
                                     <div class="form-group">
                                         <label for="name" class="col-sm-2 control-label">Semester</label>
                                         <div class="col-sm-12">

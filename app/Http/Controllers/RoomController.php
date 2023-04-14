@@ -37,6 +37,7 @@ class RoomController extends Controller
 
                     $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
 
+                    $btn = $btn . ' <a href="/teacher/syn-student/'. $row->id . '" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-primary btn-sm "><i class="fa-solid fa-circle-info"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -67,7 +68,6 @@ class RoomController extends Controller
             [
                 'name' => $request->name,
                 'teacher_id' => $request->teacher_id,
-                'student_id' => $request->student_id,
                 'subject_id' => $request->subject_id,
                 'semester_id' => $request->semester_id,
             ]

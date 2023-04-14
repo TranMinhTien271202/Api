@@ -21,17 +21,13 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Tên Sinh Viên</th>
-                <th scope="col" >Quản lý</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($data as $item)
+            @foreach ($data as $key => $item)
                 <tr>
-                    <th scope="row">{{ $item->id }}</th>
+                    <th scope="row">{{ $key+1 }}</th>
                     <td scope="col">{{ $item->students->name }}</td>
-                    <td>
-                        <a href="" class="btn btn-primary xs">Chi Tiết</a>
-                    </td>
                 </tr>
             @endforeach
         </tbody>

@@ -12,6 +12,11 @@
         integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        .text-danger{
+            color: red;
+        }
+    </style>
 </head>
 
 <body>
@@ -23,7 +28,7 @@
                 <input type="email" id="email" placeholder="Email" />
                 <span class="text-danger error-text email_err"></span>
                 <input type="password" id="password" placeholder="Password" />
-                <span class="text-danger error-text password_err"></span>
+                <span class="text-danger error-text password_err" ></span>
                 <a href="#">Quên mật khẩu?</a>
                 <button type="submit" id="btn-login" >Đăng nhập</button>
             </form>

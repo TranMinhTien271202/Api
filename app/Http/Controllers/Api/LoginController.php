@@ -34,7 +34,7 @@ class LoginController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-        return response()->json(['success' => 'Product saved successfully.', $user]);
+        return response()->json(['success' => 'Đăng ký thành công.', $user]);
     }
 
     /**

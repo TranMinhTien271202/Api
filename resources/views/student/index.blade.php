@@ -92,11 +92,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $item)
+                                        @foreach ($data as $key => $item)
                                             <tr>
-                                                <td>No {{$item->id}}</td>
+                                                <td>No {{$key+1}}</td>
                                                 <td>{{$item->students->name}}</td>
-                                                <td>{{$item->total}}</td>
+                                                <td>{{ number_format($item->total, 2) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

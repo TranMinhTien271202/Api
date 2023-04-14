@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Point;
+use App\Models\Student;
+use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -70,7 +73,7 @@ class TeacherLoginController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
-            return response()->json(['success' => 'Product saved successfully.', $teacher]);
+            return response()->json(['success' => 'Đăng ký thành công.', $teacher]);
         }
 
         return response()->json([
@@ -79,6 +82,17 @@ class TeacherLoginController extends Controller
     }
     public function logout(){
         auth('teacher')->logout();
-        return response()->json(['success' => 'You have been logged out']);
+        return redirect()->route('teacher.index');
+    }
+    public function dashboard(){
+        $teacher = Teacher::all();
+        $student = Student::all();
+        $subject = Subject::all();
+        $data = Point::selectRaw('points.*, sum(value) / count(value) as total')
+        ->groupBy('points.student_id')
+        ->orderBy('total','desc')
+        ->take(5)
+        ->get();
+        return view('student.index', ['teacher' => $teacher, 'student' => $student, 'subject' => $subject, 'data' => $data]);
     }
 }

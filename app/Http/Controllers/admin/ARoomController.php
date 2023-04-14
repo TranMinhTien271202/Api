@@ -8,6 +8,7 @@ use App\Models\Room;
 use App\Models\RoomStudent;
 use App\Models\Semester;
 use App\Models\Subject;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 class ARoomController extends Controller
@@ -43,7 +44,8 @@ class ARoomController extends Controller
         }
         $subject = Subject::all();
         $semester = Semester::all();
-        return view('admin.room.index', ['subject' => $subject, 'semester' => $semester]);
+        $teacher = Teacher::all();
+        return view('admin.room.index', ['subject' => $subject, 'semester' => $semester, 'teacher' => $teacher]);
     }
 
     /**
@@ -64,7 +66,6 @@ class ARoomController extends Controller
             [
                 'name' => $request->name,
                 'teacher_id' => $request->teacher_id,
-                'student_id' => $request->student_id,
                 'subject_id' => $request->subject_id,
                 'semester_id' => $request->semester_id,
             ]

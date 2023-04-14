@@ -23,7 +23,6 @@ class AddstudentController extends Controller
         } else {
             $sv = RoomStudent::pluck('student_id')->toArray();
             $student = Student::all();
-
         }
         $room = Room::all();
         $teacher = Teacher::all();
@@ -49,7 +48,7 @@ class AddstudentController extends Controller
         if ($validator->passes()) {
             $room = Room::where('id', $request->room_id)->first();
             $student = Student::whereIn('id', $request->student_id)->get();
-            $student =  RoomStudent::whereIn('student_id','!=', $request->student_id)->get();
+            // $data =  RoomStudent::whereIn('student_id', $request->student_id)->get();
             foreach ($student as $row) {
                 $data = new RoomStudent();
                 $data->student_id = $row->id;
@@ -58,7 +57,7 @@ class AddstudentController extends Controller
                 $data->semester_id = $request->semester_id;
                 $data->save();
             };
-            return response()->json(['success' => 'Thêm sinh viên vào lớp'. $room->name . ' thành công', 'request' => $request->student_id, 'student' => $student]);
+            return response()->json(['success' => 'Thêm sinh viên vào lớp ' . $room->name . ' thành công', 'data' => $request->all()]);
         }
         return response()->json([
             'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),

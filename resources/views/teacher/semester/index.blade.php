@@ -18,8 +18,7 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"><i
-                        class="fa-solid fa-plus"></i></a>
+                <a class="btn btn-success xs btn-sm" href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a>
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
@@ -43,27 +42,24 @@
                                 <form id="productForm" name="productForm" class="form-horizontal">
                                     <input type="hidden" name="_id" id="_id">
                                     <div class="form-group">
-                                        <label for="name" class="col-sm form-label">Tên kỳ</label>
+                                        <label for="name" class="col-sm control-label">Tên kỳ</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
-                                            <span class="text-danger error-text name_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm form-label">Ngày bắt đầu</label>
+                                        <label for="name" class="col-sm control-label">Ngày bắt đầu</label>
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="start_date" name="start_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
-                                            <span class="text-danger error-text start_date_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm form-label">Ngày kết thúc</label>
+                                        <label for="name" class="col-sm control-label">Ngày kết thúc</label>
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="end_date" name="end_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
-                                            <span class="text-danger error-text end_date_err"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -183,6 +179,7 @@
             });
             /* Delete Product Code */
             $('body').on('click', '.deleteProduct', function() {
+                var _id = $(this).data("id");
                 Swal.fire({
                     title: 'Are you sure you want to delete?',
                     text: "You won't be able to undo this once you do!",
@@ -193,7 +190,6 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        var _id = $(this).data("id");
                         $.ajax({
                             type: "DELETE",
                             url: "{{ route('semester.index') }}" + '/' + _id,
@@ -222,13 +218,6 @@
                 })
             });
         });
-
-        function printErrorMsg(msg) {
-            $.each(msg, function(key, value) {
-                console.log(key);
-                $('.' + key + '_err').text(value);
-            });
-        }
     </script>
 @endsection
 

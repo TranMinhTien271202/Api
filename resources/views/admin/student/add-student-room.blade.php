@@ -32,7 +32,7 @@
                                             <div class="form-group">
                                                 <label>Chọn lớp</label>
                                                 <select class="select2" id="room_id" data-placeholder="Select a State"
-                                                    style="width:100%">
+                                                    style="width:550px">
                                                     @foreach ($room as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endforeach
@@ -42,7 +42,7 @@
                                             <div class="form-group">
                                                 <label>Chọn kỳ</label>
                                                 <select class="select2" id="semester_id" data-placeholder="Select a State"
-                                                    style="width:100%">
+                                                    style="width:550px">
                                                     @foreach ($semester as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endforeach
@@ -51,8 +51,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Chọn giáo viên</label>
-                                                <select class="select2" id="teacher_id" data-placeholder="Mời chọn giáo viên"
-                                                    style="width:100%">
+                                                <select class="select2" id="teacher_id"
+                                                    data-placeholder="Mời chọn giáo viên" style="width:550px">
 
                                                     @foreach ($teacher as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
