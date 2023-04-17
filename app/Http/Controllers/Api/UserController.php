@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use DataTables;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -17,7 +18,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             $data = User::latest()->get();
-            return Datatables::of($data)
+            return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
 
@@ -46,13 +47,35 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user =  User::updateOrCreate(
-            ['id' => $request->_id],
+        $validator = Validator::make(
+            $request->all(),
             [
-            'name' => $request->name,
-            'email' => $request->email,
+                'name' => 'required',
+                'email' => 'required|unique:users',
+                'password' => 'required|min:6',
+            ],
+            [
+                'name.required' => "Tên không được để trống.",
+                'email.required' => 'Email không được để trống.',
+                'password.required' => 'password không được để trống.',
+                'email.unique' => 'email đã tồn tại',
+                'password.min' => 'mật khẩu phải trên 6 ký tự'
+            ]
+        );
+        if ($validator->passes()) {
+            $user =  User::updateOrCreate(
+                ['id' => $request->_id],
+                [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password)
+                ]
+            );
+            return response()->json(['success' => 'Thêm tài khoản thành công.', $request->all()]);
+        }
+        return response()->json([
+            'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
         ]);
-        return response()->json(['success' => 'Product successfully.', $request->all()]);
     }
     public function show(string $id)
     {
@@ -82,6 +105,6 @@ class UserController extends Controller
     public function destroy($id)
     {
         User::find($id)->delete();
-        return response()->json(['success' => 'Product deleted successfully.']);
+        return response()->json(['success' => 'Xóa tài khoản thành công.']);
     }
 }

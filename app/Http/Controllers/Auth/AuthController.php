@@ -108,6 +108,6 @@ class AuthController extends Controller
         ->orderBy('total','desc')
         ->take(5)
         ->get();
-        return view('student.index', ['teacher' => $teacher, 'student' => $student, 'subject' => $subject, 'data' => $data]);
+        return view('admin.dashboard', ['teacher' => $teacher, 'student' => $student, 'subject' => $subject, 'data' => $data]);
     }
 }

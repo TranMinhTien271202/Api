@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <h2>Đăng nhập sinh viên</h2>
+    <h2>Đăng nhập nhà quản trị</h2>
     <div class="container" id="container">
         <div class="form-container sign-in-container">
             <form method="POST">

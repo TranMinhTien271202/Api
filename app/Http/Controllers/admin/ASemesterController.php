@@ -29,7 +29,7 @@ class ASemesterController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
                     $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
-                    $btn = $btn . ' <a href="/admin/admin-add-student/' . $row->id . '" data-toggle="tooltip" class="btn btn-info btn-sm"><i class="fa-solid fa-circle-info"></i></a>';
+                    // $btn = $btn . ' <a href="/admin/admin-add-student/' . $row->id . '" data-toggle="tooltip" class="btn btn-info btn-sm"><i class="fa-solid fa-circle-info"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])

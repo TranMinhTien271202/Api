@@ -9,6 +9,7 @@ use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
 
 class RoomController extends Controller
@@ -19,29 +20,56 @@ class RoomController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Room::with(['teachers', 'subjects', 'semesters'])->where('teacher_id', '=', auth('teacher')->user()->id)->select('rooms.*')->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->editColumn('teachers', function ($data) {
-                    return $data->teachers->name;
-                })
-                ->editColumn('subjects', function ($data) {
-                    return $data->subjects->name;
-                })
-                ->editColumn('semesters', function ($data) {
-                    return $data->semesters->name;
-                })
-                ->addColumn('action', function ($row) {
+            if ($request->search) {
+                $data = Room::with(['teachers', 'subjects', 'semesters'])
+                    ->where('semester_id', $request->search)
+                    ->where('teacher_id', '=', auth('teacher')->user()->id)
+                    ->select('rooms.*')->get();
+                return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->editColumn('teachers', function ($data) {
+                        return $data->teachers->name;
+                    })
+                    ->editColumn('subjects', function ($data) {
+                        return $data->subjects->name;
+                    })
+                    ->editColumn('semesters', function ($data) {
+                        return $data->semesters->name;
+                    })
+                    ->addColumn('action', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
 
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
 
-                    $btn = $btn . ' <a href="/teacher/syn-student/'. $row->id . '" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-primary btn-sm "><i class="fa-solid fa-circle-info"></i></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+                        return $btn;
+                    })
+                    ->make(true);
+            } else {
+                $data = Room::with(['teachers', 'subjects', 'semesters'])
+                    ->where('teacher_id', '=', auth('teacher')->user()->id)
+                    ->select('rooms.*')->get();
+                return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->editColumn('teachers', function ($data) {
+                        return $data->teachers->name;
+                    })
+                    ->editColumn('subjects', function ($data) {
+                        return $data->subjects->name;
+                    })
+                    ->editColumn('semesters', function ($data) {
+                        return $data->semesters->name;
+                    })
+                    ->addColumn('action', function ($row) {
+
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fa-solid fa-pen-to-square"></i></a>';
+
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
+
+                        return $btn;
+                    })
+                    ->make(true);
+            }
         }
         $subject = Subject::all();
         $semester = Semester::all();
@@ -63,16 +91,32 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        $data =  Room::updateOrCreate(
-            ['id' => $request->_id],
+        $validator = Validator::make(
+            $request->all(),
             [
-                'name' => $request->name,
-                'teacher_id' => $request->teacher_id,
-                'subject_id' => $request->subject_id,
-                'semester_id' => $request->semester_id,
+                'name' => 'required',
+                'subject_id' => 'required',
+                'semester_id' => 'required',
+            ],
+            [
+                'name.required' => "Tên lớp không được để trống.",
+                'semester_id.required' => 'Kỳ học không được để trống.',
+                'subject_id.required' => 'Môn học không được để trống.',
             ]
         );
-        return response()->json(['success' => 'Product successfully.', $data]);
+        if ($validator->passes()) {
+            $data =  Room::updateOrCreate(
+                ['id' => $request->_id],
+                [
+                    'name' => $request->name,
+                    'teacher_id' => $request->teacher_id,
+                    'subject_id' => $request->subject_id,
+                    'semester_id' => $request->semester_id,
+                ]
+            );
+            return response()->json(['success' => 'Product successfully.', $data]);
+        }
+        return response()->json(['message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),]);
     }
 
     /**
@@ -109,9 +153,9 @@ class RoomController extends Controller
         $point = Point::where('room_id', $id)->first();
         if ($room_student == null && $point == null) {
             Room::find($id)->delete();
-            return response()->json(['success' => 'Product deleted successfully.', 'point' => $point , 'room_student' => $room_student]);
-        }else{
-            return response()->json(['success' => 'Product deleted false.', 'point' => $point , 'room_student' => $room_student]);
+            return response()->json(['status' => 1, 'success' => 'Product deleted successfully.', 'point' => $point, 'room_student' => $room_student]);
+        } else {
+            return response()->json(['status' => 2, 'error' => 'Product deleted false.', 'point' => $point, 'room_student' => $room_student]);
         }
     }
 }

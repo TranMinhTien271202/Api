@@ -7,6 +7,9 @@
             <div class="info">
                 <a href="{{ route('auth.profile') }}" class="d-block">{{ auth()->user()->email }}</a>
             </div>
+            <div class="info">
+                <a href="logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+            </div>
         </div>
         <div class="form-inline">
             <div class="input-group" data-widget="sidebar-search">

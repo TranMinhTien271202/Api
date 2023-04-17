@@ -18,7 +18,7 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success xs btn-sm" href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a>
+                {{-- <a class="btn btn-success xs btn-sm" href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a> --}}
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
@@ -26,7 +26,7 @@
                             <th>Tên kỳ</th>
                             <th>Ngày bắt đầu</th>
                             <th>Ngày kết thúc</th>
-                            <th width="280px">Quản lý</th>
+                            {{-- <th width="280px">Quản lý</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -104,12 +104,12 @@
                     {
                         data: 'end_date',
                     },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
+                    // {
+                    //     data: 'action',
+                    //     name: 'action',
+                    //     orderable: false,
+                    //     searchable: false
+                    // },
                 ]
             });
             /*Click to Button*/

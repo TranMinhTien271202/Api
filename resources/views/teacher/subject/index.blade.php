@@ -18,14 +18,14 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success xs btn-sm" href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a>
+                {{-- <a class="btn btn-success xs btn-sm" href="javascript:void(0)" id="createNewProduct"><i class="fa-solid fa-plus"></i></a> --}}
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
                             <th>STT</th>
                             <th>Tên môn học</th>
                             <th>Mã môn</th>
-                            <th width="280px">Quản lý</th>
+                            {{-- <th width="280px">Quản lý</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +73,9 @@
 @endsection
 @section('script')
     @parent
+    <script>
+        $('.select2').select2()
+    </script>
     <script type="text/javascript">
         $(function() {
             /*Pass Header Token*/
@@ -98,12 +101,12 @@
                         data: 'subject_code',
                         name: 'subject_code'
                     },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
+                    // {
+                    //     data: 'action',
+                    //     name: 'action',
+                    //     orderable: false,
+                    //     searchable: false
+                    // },
                 ]
             });
             /*Click to Button*/
@@ -213,7 +216,6 @@
                 })
             });
         });
-
         function printErrorMsg(msg) {
             $.each(msg, function(key, value) {
                 console.log(key);

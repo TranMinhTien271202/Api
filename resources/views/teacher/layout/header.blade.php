@@ -7,6 +7,9 @@
             <div class="info">
                 <a href="{{ route('teacher.profile') }}" class="d-block">{{ auth('teacher')->user()->name }}</a>
             </div>
+            <div class="info">
+                <a href="logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+            </div>
         </div>
         <div class="form-inline">
             <div class="input-group" data-widget="sidebar-search">
@@ -22,6 +25,14 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
+                <li class="nav-item">
+                    <a href="{{ route('teacher.dashboard') }}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Thống kê
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('subject.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>

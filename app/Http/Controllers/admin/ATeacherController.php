@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class ATeacherController extends Controller
@@ -47,7 +48,35 @@ class ATeacherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required',
+                'email' => 'required|unique:teachers',
+                'password' => 'required|min:6',
+            ],
+            [
+                'name.required' => "Tên không được để trống.",
+                'email.required' => 'Email không được để trống.',
+                'password.required' => 'password không được để trống.',
+                'email.unique' => 'email đã tồn tại',
+                'password.min' => 'mật khẩu phải trên 6 ký tự'
+            ]
+        );
+        if ($validator->passes()) {
+            $user =  Teacher::updateOrCreate(
+                ['id' => $request->_id],
+                [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password)
+                ]
+            );
+            return response()->json(['success' => 'Thêm tài khoản thành công.', $request->all()]);
+        }
+        return response()->json([
+            'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+        ]);
     }
 
     /**
@@ -63,7 +92,8 @@ class ATeacherController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Teacher::find($id);
+        return response()->json($product);
     }
 
     /**

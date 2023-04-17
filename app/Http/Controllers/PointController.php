@@ -23,7 +23,7 @@ class PointController extends Controller
                 $data = Point::with(['teachers', 'subjects', 'students', 'rooms'])
                     ->where('room_id', $request->search)
                     ->where('teacher_id', '=', auth('teacher')->user()->id)
-                    ->select('points.*')->get();
+                    ->get();
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->editColumn('teachers', function ($data) {
@@ -127,9 +127,7 @@ class PointController extends Controller
             );
             return response()->json(['success' => 'Product successfully.', $request->all()]);
         }
-        return response()->json([
-            'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
-        ]);
+        return response()->json(['message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),]);
     }
 
     /**

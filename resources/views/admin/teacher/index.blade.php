@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Semester</h1>
+                        <h1 class="m-0">Tài khoản giáo viên</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Semester</li>
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Tài khoản giáo viên</li>
                         </ol>
                     </div>
                 </div>
@@ -18,16 +18,16 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <a class="btn btn-success m-2" href="javascript:void(0)" id="createNewProduct"> Create</a>
+                <a class="btn btn-success xs btn-sm" href="javascript:void(0)" id="createNewProduct"><i
+                        class="fa-solid fa-plus"></i></a>
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Name</th>
+                            <th>Tên</th>
                             <th>Email</th>
-                            <th>Phone</th>
-                            <th>Image</th>
-                            <th width="280px">Action</th>
+                            <th>Ảnh</th>
+                            <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,24 +47,28 @@
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                                <span class="text-danger error-text name_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <label for="email" class="col-sm-2 control-label">Email</label>
                                         <div class="col-sm-12">
-                                            <input type="date" class="form-control" id="start_date" name="start_date"
-                                                placeholder="Enter Name" value="" maxlength="50" required="">
+                                            <input type="email" class="form-control" id="email" name="email"
+                                                placeholder="Enter Email" value="" maxlength="50" required="">
+                                                <span class="text-danger error-text email_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <label for="email" class="col-sm-2 control-label">Password</label>
                                         <div class="col-sm-12">
-                                            <input type="date" class="form-control" id="end_date" name="end_date"
-                                                placeholder="Enter Name" value="" maxlength="50" required="">
+                                            <input type="password" class="form-control" id="password" name="password"
+                                                placeholder="Enter Password" value="" maxlength="50" required="">
+                                                <span class="text-danger error-text password_err"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Create
+                                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Save
+                                            changes
                                         </button>
                                     </div>
                                 </form>
@@ -91,7 +95,9 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin-teacher.index') }}",
+                ajax: {
+                    url: "{{ route('admin-teacher.index') }}",
+                },
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
@@ -101,9 +107,6 @@
                     },
                     {
                         data: 'email',
-                    },
-                    {
-                        data: 'phone',
                     },
                     {
                         data: 'image',
@@ -120,25 +123,25 @@
                     },
                 ]
             });
-            /*Click to Button*/
             $('#createNewProduct').click(function() {
-                $('#saveBtn').val("CreateSemester");
+                $('#saveBtn').val("create-product");
                 $('#_id').val('');
                 $('#productForm').trigger("reset");
-                $('#modelHeading').html("Create New Semester");
+                $('#modelHeading').html("Create New Product");
                 $('#ajaxModel').modal('show');
             });
             /*Click to Edit Button*/
             $('body').on('click', '.editProduct', function() {
                 var _id = $(this).data('id');
-                $.get("{{ route('semester.index') }}" + '/' + _id + '/edit', function(data) {
-                    $('#modelHeading').html("Update Semester");
+                $.get("{{ route('admin-teacher.index') }}" + '/' + _id + '/edit', function(data) {
+                    $('#modelHeading').html("Point");
                     $('#saveBtn').val("edit-user");
                     $('#ajaxModel').modal('show');
                     $('#_id').val(data.id);
+                    $('#value').val(data.value);
                     $('#name').val(data.name);
-                    $('#start_date').val(data.start_date);
-                    $('#end_date').val(data.end_date);
+                    $('#email').val(data.email);
+                    $('#password').val(data.password);
                 })
             });
             /* Create Product Code -*/
@@ -147,14 +150,33 @@
                 $(this).html('Sending..');
                 $.ajax({
                     data: $('#productForm').serialize(),
-                    url: "{{ route('semester.store') }}",
+                    url: "{{ route('admin-teacher.store') }}",
                     type: "POST",
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
-                        $('#productForm').trigger("reset");
-                        $('#ajaxModel').modal('hide');
-                        table.draw();
+                        if ($.isEmptyObject(data.message)) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter',
+                                        Swal.stopTimer)
+                                    toast.addEventListener('mouseleave',
+                                        Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.success
+                            })
+                            table.draw();
+                        } else {
+                            printErrorMsg(data.message);
+                        }
                     },
                     error: function(data) {
                         console.log('Error:', data);
@@ -164,22 +186,61 @@
             });
             /* Delete Product Code */
             $('body').on('click', '.deleteProduct', function() {
-                var _id = $(this).data("id");
-                confirm("Are You sure want to delete !");
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "{{ route('semester.index') }}" + '/' + _id,
-                    success: function(data) {
-                        table.draw();
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
+                Swal.fire({
+                    title: 'Are you sure you want to delete?',
+                    text: "You won't be able to undo this once you do!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var _id = $(this).data("id");
+                        $.ajax({
+                            type: "DELETE",
+                            url: "{{ route('admin-teacher.index') }}" + '/' + _id,
+                            success: function(data) {
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast
+                                            .addEventListener(
+                                                'mouseenter',
+                                                Swal
+                                                .stopTimer)
+                                        toast
+                                            .addEventListener(
+                                                'mouseleave',
+                                                Swal
+                                                .resumeTimer
+                                            )
+                                    }
+                                })
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: data.success
+                                })
+                                table.draw();
+                            },
+                            error: function(data) {
+                                console.log('Error:', data);
+                            }
+                        });
                     }
-                });
+                })
             });
         });
+        /*Click to Button*/
+        function printErrorMsg(msg) {
+            $.each(msg, function(key, value) {
+                console.log(key);
+                $('.' + key + '_err').text(value);
+            });
+        }
     </script>
 @endsection
-
-</html>

@@ -60,45 +60,46 @@
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="value" name="value"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                                <span class="text-danger error-text value_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="name" class="col-sm control-label">Sinh viên</label>
                                         <div class="col-sm-12">
-                                            <select name="student_id" class="form-control" id="student_id"
-                                                data-show-subtext="true" data-live-search="true">
+                                            <select name="student_id" class="form-control" id="student_id">
                                                 <option value="">Mời Chọn Sinh Viên</option>
                                                 @foreach ($student as $student)
                                                     <option value="{{ $student->student_id }}">
                                                         {{ $student->students->name }}</option>
                                                 @endforeach
                                             </select>
+                                            <span class="text-danger error-text student_id_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="name" class="col-sm control-label">Môn học</label>
                                         <div class="col-sm-12">
-                                            <select name="subject_id" class="form-control" id="subject_id"
-                                                data-show-subtext="true" data-live-search="true">
-                                                <option value="">Mời Chọn Môn Học</option>
+                                            <select class="form-control" id="subject_id" name="subject_id">
+                                                <option value="">Mời Chọn môn học</option>
                                                 @foreach ($subject as $subject)
-                                                    <option value="{{ $subject->subject_id }}">
+                                                    <option value="{{ $subject->id }}">
                                                         {{ $subject->name }}</option>
                                                 @endforeach
                                             </select>
+                                            <span class="text-danger error-text subject_id_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="name" class="col-sm control-label">Lớp học</label>
                                         <div class="col-sm-12">
-                                            <select name="room_id" class="form-control" id="room_id"
-                                                data-show-subtext="true" data-live-search="true">
+                                            <select name="room_id" class="form-control" id="room_id">
                                                 <option value="">Mời Chọn lớp học</option>
                                                 @foreach ($room as $room)
                                                     <option value="{{ $room->room_id }}">
                                                         {{ $room->rooms->name }}</option>
                                                 @endforeach
                                             </select>
+                                            <span class="text-danger error-text room_id_err"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -201,6 +202,7 @@
                             dataType: 'json',
                             success: function(data) {
                                 console.log(data);
+                                if ($.isEmptyObject(data.message)) {
                                 const Toast = Swal.mixin({
                                     toast: true,
                                     position: 'top-end',
@@ -219,6 +221,9 @@
                                     title: data.success
                                 })
                                 table.draw();
+                            }else{
+                                printErrorMsg(data.message);
+                            }
                             },
                             error: function(data) {
                                 console.log('Error:', data);
@@ -276,25 +281,37 @@
                             }
                         })
                     });
-                    $('#btn-search').click(function() {
-                        var search = $('#search').val();
-                        $.ajax({
-                            data: {
-                                search: search,
-                            },
-                            url: "{{ route('point.index') }}",
-                            type: "GET",
-                            dataType: 'json',
-                            success: function(data) {
-                                console.log(data);
-                                $('.data-table').DataTable().destroy();
-                                fill_datatable(search);
-                            },
-                        });
-                    });
                 }
+                $('#btn-search').click(function() {
+                    var search = $('#search').val();
+                    $.ajax({
+                        data: {
+                            search: search,
+                        },
+                        url: "{{ route('point.index') }}",
+                        type: "GET",
+                        dataType: 'json',
+                        success: function(data) {
+                            console.log(data);
+                            $('.data-table').DataTable().destroy();
+                            fill_datatable(search);
+                        },
+                    });
+                });
+                $('#reset').click(function() {
+                    $('#semester').val('');
+                    $('#data-table').DataTable().destroy();
+                    fill_datatable();
+                });
             });
             /*Click to Button*/
         });
+
+        function printErrorMsg(msg) {
+            $.each(msg, function(key, value) {
+                console.log(key);
+                $('.' + key + '_err').text(value);
+            });
+        }
     </script>
 @endsection

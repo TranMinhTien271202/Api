@@ -65,15 +65,11 @@
     <script type="text/javascript">
         $(document).ready(function() {
             fill_datatable();
-
             function fill_datatable(semester = '') {
                 var dataTable = $('#data-table').DataTable({
                     processing: true,
                     serverSide: true,
                     dom: '<"float-left"B><"float-right"f>rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
-                    buttons: [
-                        'copy', 'excel', 'pdf'
-                    ],
                     ajax: {
                         url: "{{ route('student-room.index') }}",
                         data: {
