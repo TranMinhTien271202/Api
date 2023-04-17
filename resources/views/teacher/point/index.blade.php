@@ -60,7 +60,7 @@
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="value" name="value"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
-                                                <span class="text-danger error-text value_err"></span>
+                                            <span class="text-danger error-text value_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -169,40 +169,42 @@
                             },
                         ]
                     });
-                    $('#createNewProduct').click(function() {
-                        $('#saveBtn').val("create-product");
-                        $('#_id').val('');
-                        $('#productForm').trigger("reset");
-                        $('#modelHeading').html("Create New Product");
+
+                }
+                $('#createNewProduct').click(function() {
+                    $('#saveBtn').val("create-product");
+                    $('#_id').val('');
+                    $('#productForm').trigger("reset");
+                    $('#modelHeading').html("Thêm điểm");
+                    $('#ajaxModel').modal('show');
+                });
+                /*Click to Edit Button*/
+                $('body').on('click', '.editProduct', function() {
+                    var _id = $(this).data('id');
+                    $.get("{{ route('point.index') }}" + '/' + _id + '/edit', function(data) {
+                        $('#modelHeading').html("Sửa điểm");
+                        $('#saveBtn').val("edit-user");
                         $('#ajaxModel').modal('show');
-                    });
-                    /*Click to Edit Button*/
-                    $('body').on('click', '.editProduct', function() {
-                        var _id = $(this).data('id');
-                        $.get("{{ route('point.index') }}" + '/' + _id + '/edit', function(data) {
-                            $('#modelHeading').html("Point");
-                            $('#saveBtn').val("edit-user");
-                            $('#ajaxModel').modal('show');
-                            $('#_id').val(data.id);
-                            $('#value').val(data.value);
-                            $('#teacher_id').val(data.teacher_id);
-                            $('#student_id').val(data.student_id);
-                            $('#subject_id').val(data.subject_id);
-                            $('#room_id').val(data.room_id);
-                        })
-                    });
-                    /* Create Product Code -*/
-                    $('#saveBtn').click(function(e) {
-                        e.preventDefault();
-                        $(this).html('Sending..');
-                        $.ajax({
-                            data: $('#productForm').serialize(),
-                            url: "{{ route('point.store') }}",
-                            type: "POST",
-                            dataType: 'json',
-                            success: function(data) {
-                                console.log(data);
-                                if ($.isEmptyObject(data.message)) {
+                        $('#_id').val(data.id);
+                        $('#value').val(data.value);
+                        $('#teacher_id').val(data.teacher_id);
+                        $('#student_id').val(data.student_id);
+                        $('#subject_id').val(data.subject_id);
+                        $('#room_id').val(data.room_id);
+                    })
+                });
+                /* Create Product Code -*/
+                $('#saveBtn').click(function(e) {
+                    e.preventDefault();
+                    $(this).html('Sending..');
+                    $.ajax({
+                        data: $('#productForm').serialize(),
+                        url: "{{ route('point.store') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(data) {
+                            console.log(data);
+                            if ($.isEmptyObject(data.message)) {
                                 const Toast = Swal.mixin({
                                     toast: true,
                                     position: 'top-end',
@@ -220,68 +222,69 @@
                                     icon: 'success',
                                     title: data.success
                                 })
-                                table.draw();
-                            }else{
+                                $('.data-table').DataTable().destroy();
+                                fill_datatable();
+                            } else {
                                 printErrorMsg(data.message);
                             }
-                            },
-                            error: function(data) {
-                                console.log('Error:', data);
-                                $('#saveBtn').html('Save Changes');
-                            }
-                        });
+                        },
+                        error: function(data) {
+                            console.log('Error:', data);
+                            $('#saveBtn').html('Save Changes');
+                        }
                     });
-                    /* Delete Product Code */
-                    $('body').on('click', '.deleteProduct', function() {
-                        Swal.fire({
-                            title: 'Are you sure you want to delete?',
-                            text: "You won't be able to undo this once you do!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, delete it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                var _id = $(this).data("id");
-                                $.ajax({
-                                    type: "DELETE",
-                                    url: "{{ route('point.index') }}" + '/' + _id,
-                                    success: function(data) {
-                                        const Toast = Swal.mixin({
-                                            toast: true,
-                                            position: 'top-end',
-                                            showConfirmButton: false,
-                                            timer: 3000,
-                                            timerProgressBar: true,
-                                            didOpen: (toast) => {
-                                                toast
-                                                    .addEventListener(
-                                                        'mouseenter',
-                                                        Swal
-                                                        .stopTimer)
-                                                toast
-                                                    .addEventListener(
-                                                        'mouseleave',
-                                                        Swal
-                                                        .resumeTimer
-                                                    )
-                                            }
-                                        })
-                                        Toast.fire({
-                                            icon: 'success',
-                                            title: data.success
-                                        })
-                                        table.draw();
-                                    },
-                                    error: function(data) {
-                                        console.log('Error:', data);
-                                    }
-                                });
-                            }
-                        })
-                    });
-                }
+                });
+                /* Delete Product Code */
+                $('body').on('click', '.deleteProduct', function() {
+                    Swal.fire({
+                        title: 'Are you sure you want to delete?',
+                        text: "You won't be able to undo this once you do!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var _id = $(this).data("id");
+                            $.ajax({
+                                type: "DELETE",
+                                url: "{{ route('point.index') }}" + '/' + _id,
+                                success: function(data) {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast
+                                                .addEventListener(
+                                                    'mouseenter',
+                                                    Swal
+                                                    .stopTimer)
+                                            toast
+                                                .addEventListener(
+                                                    'mouseleave',
+                                                    Swal
+                                                    .resumeTimer
+                                                )
+                                        }
+                                    })
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: data.success
+                                    })
+                                    $('.data-table').DataTable().destroy();
+                                    fill_datatable();
+                                },
+                                error: function(data) {
+                                    console.log('Error:', data);
+                                }
+                            });
+                        }
+                    })
+                });
                 $('#btn-search').click(function() {
                     var search = $('#search').val();
                     $.ajax({

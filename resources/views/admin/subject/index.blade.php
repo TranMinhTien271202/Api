@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Subject</h1>
+                        <h1 class="m-0">Môn học</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Subject</li>
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Môn học</li>
                         </ol>
                     </div>
                 </div>
@@ -45,14 +45,14 @@
                                         <label for="name" class="col-sm control-label">Tên môn</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
-                                                placeholder="Enter Name" value="" maxlength="50" required="">
+                                                placeholder="Mời nhập tên môn học" value="" maxlength="50" required="">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="name" class="col-sm control-label">Mã môn</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="subject_code" name="subject_code"
-                                                placeholder="Enter subject code" value="" maxlength="50"
+                                                placeholder="Mời nhập mã môn học" value="" maxlength="50"
                                                 required="">
                                         </div>
                                     </div>

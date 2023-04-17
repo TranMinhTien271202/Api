@@ -53,6 +53,7 @@ Route::prefix('admin')->group(function () {
         Route::get('auth-profile', [AuthController::class, 'profile'])->name('auth.profile');
         Route::post('auth-profile', [AuthController::class, 'updateProfile'])->name('auth.updateProfile');
         Route::resource('admin-room', ARoomController::class);
+        Route::get('admin-detail-room/{id}', [ARoomController::class, 'detail'])->name('admin.detail.room');
         Route::resource('admin-subject', ASubjectController::class);
         Route::resource('admin-semester', ASemesterController::class);
         Route::resource('admin-student', AStudentController::class);

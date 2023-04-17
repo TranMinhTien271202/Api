@@ -15,3 +15,4 @@
 <script src="{{asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 <script src="{{asset('dist/js/adminlte.js')}}"></script>
 {{-- <script src="{{asset('dist/js/demo.js')}}"></script> --}}
+<script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>

@@ -30,13 +30,15 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="sele">
-                    <select name="semester" class="form-select" id="semester">
+                    <select name="semester" class="select2" style="width:15%" id="semester">
                         <option value="">Mời chọn kỳ học</option>
                         @foreach ($semester as $row)
                             <option value="{{ $row->id }}">{{ $row->name }}</option>
                         @endforeach
                     </select>
-                    <button type="submit" id="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="btn-search"
+                    style="padding-bottom: 5px;border-radius: 5px;height:30px"><i
+                        class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
                 <table class="table table-bordered data-table" id="data-table">
                     <thead>
@@ -61,6 +63,9 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+    </script>
+    <script>
+        $('.select2').select2()
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
