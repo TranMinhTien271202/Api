@@ -56,7 +56,7 @@
                         data: 'subject',
                     },
                     {
-                        data:'subject-code'
+                        data: 'subject-code'
                     },
                     {
                         data: 'action',
