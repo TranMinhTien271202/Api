@@ -16,10 +16,10 @@ class SRoomController extends Controller
     {
 
         if ($request->ajax()) {
-            if ($request->search) {
+            if ($request->semester) {
                 $data = RoomStudent::join('students', 'students.id', '=', 'room_students.student_id')
                     ->where('room_students.student_id', auth('student')->user()->id)
-                    ->where('semester_id', $request->search)
+                    ->where('semester_id', $request->semester)
                     ->select('room_students.*')
                     ->get();
                 return DataTables::of($data)
@@ -33,27 +33,23 @@ class SRoomController extends Controller
                     })
                     ->make(true);
             } else {
-            $day = Carbon::now()->format('Y/m/d');
-            $semester = Semester::whereDate('start_date', '<=', $day)->whereDate('end_date', '>=', $day)->first();
-            $data = RoomStudent::join('students', 'students.id', '=', 'room_students.student_id')
-                ->where('room_students.student_id', auth('student')->user()->id)
-                ->where(function($q) use ($semester) {
-                    if ($semester){
-                        $q->where('semester_id', $semester->id);
-                    }
-                })
-                ->select('room_students.*')
-                ->get();
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->editColumn('room', function ($data) {
-                    return $data->rooms->name;
-                })
-                ->addColumn('action', function ($row) {
-                    $btn = '<a href="/student/student-user/' . $row->room_id . '" class="edit btn btn-primary btn-sm"><i class="fa-solid fa-circle-info"></i></a>';
-                    return $btn;
-                })
-                ->make(true);
+                $day = Carbon::now()->format('Y/m/d');
+                $semester = Semester::whereDate('start_date', '<=', $day)->whereDate('end_date', '>=', $day)->first();
+                $data = RoomStudent::join('students', 'students.id', '=', 'room_students.student_id')
+                    ->where('room_students.student_id', auth('student')->user()->id)
+                    ->where('semester_id', $semester->id)
+                    ->select('room_students.*')
+                    ->get();
+                return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->editColumn('room', function ($data) {
+                        return $data->rooms->name;
+                    })
+                    ->addColumn('action', function ($row) {
+                        $btn = '<a href="/student/student-user/'. $row->room_id . '" class="edit btn btn-primary btn-sm"><i class="fa-solid fa-circle-info"></i></a>';
+                        return $btn;
+                    })
+                    ->make(true);
             }
         }
         $semester = Semester::all();
