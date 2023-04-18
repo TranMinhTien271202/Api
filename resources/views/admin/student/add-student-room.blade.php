@@ -131,24 +131,44 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        // $('#search').on('keyup', function() {
-        //     search = $('#search').val();
-        //     $.ajax({
-        //         type: 'get',
-        //         url: 'admin-add-student',
-        //         data: {
-        //             'search': search
-        //         },
-        //         success: function(data) {
-        //             console.log(data);
-        //             var html = ''
-        //             for(let item of data) {
-        //                 html += `<input type="checkbox" selected value="`+item.id+`" name="student_id" id="student_id"> <label for="`+item.id+`">`+item.name+`</label><button>thêm</button><br />`;
-        //             }
-        //             $('#ngu').html(html);
-        //         }
-        //     });
-        // })
+        $('#search').on('keyup', function() {
+            search = $('#search').val();
+            $.ajax({
+                type: 'get',
+                url: 'admin-add-student',
+                data: {
+                    'search': search
+                },
+                success: function(data) {
+                    console.log(data);
+                    var html = ''
+                    for(let item of data) {
+                        html += `<input type="checkbox" selected value="`+item.id+`" name="student_id" id="student_id"> <label for="`+item.id+`">`+item.name+`</label><button>thêm</button><br />`;
+                    }
+                    $('#ngu').html(html);
+                }
+            });
+        })
+        $('#room_id').on('keyup', function() {
+            search = $('#room_id').val();
+            $.ajax({
+                type: 'get',
+                url: 'admin-add-student',
+                data: {
+                    'search': search
+                },
+                success: function(data) {
+                    console.log(data);
+                    var html = ''
+                    for (let item of data) {
+                        html += `<input type="checkbox" selected value="` + item.id +
+                            `" name="student_id" id="student_id"> <label for="` + item.id + `">` + item
+                            .name + `</label><button>thêm</button><br />`;
+                    }
+                    $('#ngu').html(html);
+                }
+            });
+        });
         $('#btn-create').click(function(e) {
             e.preventDefault();
             var room_id = $('#room_id').val();
@@ -194,7 +214,8 @@
                 }
 
             })
-        }); 
+        });
+
         function printErrorMsg(msg) {
             $.each(msg, function(key, value) {
                 console.log(key);

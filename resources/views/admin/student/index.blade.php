@@ -46,8 +46,9 @@
                                         <label for="name" class="col-sm control-label">Tên</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
-                                                placeholder="Mời nhập họ và tên" value="" maxlength="50" required="">
-                                                <span class="text-danger error-text name_err"></span>
+                                                placeholder="Mời nhập họ và tên" value="" maxlength="50"
+                                                required="">
+                                            <span class="text-danger error-text name_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -55,15 +56,16 @@
                                         <div class="col-sm-12">
                                             <input type="email" class="form-control" id="email" name="email"
                                                 placeholder="Mời nhập email" value="" maxlength="50" required="">
-                                                <span class="text-danger error-text email_err"></span>
+                                            <span class="text-danger error-text email_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="email" class="col-sm control-label">Mật khẩu</label>
                                         <div class="col-sm-12">
                                             <input type="password" class="form-control" id="password" name="password"
-                                                placeholder="Mời nhập mật khẩu" value="" maxlength="50" required="">
-                                                <span class="text-danger error-text password_err"></span>
+                                                placeholder="Mời nhập mật khẩu" value="" maxlength="50"
+                                                required="">
+                                            <span class="text-danger error-text password_err"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -111,7 +113,7 @@
                         data: 'image',
                         render: function(data, type) {
                             console.log(data);
-                            return '<img src="{{ asset('storage')}}/'+ data +'" width="50px">';
+                            return '<img src="{{ asset('storage') }}/' + data + '" width="50px">';
                         }
                     },
                     {
@@ -172,6 +174,8 @@
                                 icon: 'success',
                                 title: data.success
                             })
+                            $('#productForm').trigger("reset");
+                            $('#ajaxModel').modal('hide');
                             table.draw();
                         } else {
                             printErrorMsg(data.message);

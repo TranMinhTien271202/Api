@@ -194,7 +194,6 @@
                 /* Create Product Code -*/
                 $('#saveBtn').click(function(e) {
                     e.preventDefault();
-                    $(this).html('Sending..');
                     $.ajax({
                         data: $('#productForm').serialize(),
                         url: "{{ route('admin-room.store') }}",
