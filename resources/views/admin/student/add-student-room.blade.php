@@ -31,7 +31,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Chọn lớp</label>
-                                                <select class="select2" id="room_id" data-placeholder="Select a State"
+                                                <select class="select2 selec" id="room_id" data-placeholder="Select a State"
                                                     style="width:550px">
                                                     @foreach ($room as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -53,7 +53,6 @@
                                                 <label>Chọn giáo viên</label>
                                                 <select class="select2" id="teacher_id"
                                                     data-placeholder="Mời chọn giáo viên" style="width:550px">
-
                                                     @foreach ($teacher as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endforeach
@@ -103,15 +102,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="card-body" id="ngu">
-                                    @foreach ($student as $row)
-                                        <input type="checkbox" value="{{ $row->id }}" name="student_id"
-                                            id="student_id">
-                                        <label for="{{ $row->id }}">{{ $row->name }}</label>
-                                        <button style="width:10px"><i class="fa-solid fa-plus fa-2xs" style="margin:auto"></i></button>
-                                        <br>
-                                    @endforeach
-                                </div> --}}
+                                <div class="card-body" id="ngu">
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -131,25 +124,22 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $('#search').on('keyup', function() {
-            search = $('#search').val();
-            $.ajax({
-                type: 'get',
-                url: 'admin-add-student',
-                data: {
-                    'search': search
-                },
-                success: function(data) {
-                    console.log(data);
-                    var html = ''
-                    for(let item of data) {
-                        html += `<input type="checkbox" selected value="`+item.id+`" name="student_id" id="student_id"> <label for="`+item.id+`">`+item.name+`</label><button>thêm</button><br />`;
-                    }
-                    $('#ngu').html(html);
-                }
-            });
-        })
-        $('#room_id').on('keyup', function() {
+        // $('#search').on('keyup', function() {
+        //     search = $('#search').val();
+        //     $.ajax({
+        //         type: 'get',
+        //         url: 'admin-add-student',
+        //         data: {
+        //             'search': search
+        //         },
+        //         success: function(data) {
+        //             console.log(data);
+        //             var html = `<option value="`+ data.data.id +`">`+ data.data.name +`</option>`;
+        //             $('#room_id').html(html);
+        //         }
+        //     });
+        // })
+        $('#room_id').on('change', function() {
             search = $('#room_id').val();
             $.ajax({
                 type: 'get',
@@ -159,14 +149,13 @@
                 },
                 success: function(data) {
                     console.log(data);
-                    var html = ''
-                    for (let item of data) {
-                        html += `<input type="checkbox" selected value="` + item.id +
-                            `" name="student_id" id="student_id"> <label for="` + item.id + `">` + item
-                            .name + `</label><button>thêm</button><br />`;
-                    }
-                    $('#ngu').html(html);
+                    var html = `<option value="`+ data.teacher.id +`">`+ data.teacher.name +`</option>`;
+                    $('#teacher_id').html(html);
+
+                    var html = `<option value="`+ data.semester.id +`">`+ data.semester.name +`</option>`;
+                    $('#semester_id').html(html);
                 }
+
             });
         });
         $('#btn-create').click(function(e) {

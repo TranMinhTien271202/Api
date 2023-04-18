@@ -16,16 +16,22 @@ class AddstudentController extends Controller
     public function index(Request $request)
     {
 
-        $semester = Semester::all();
+
         if ($request->ajax()) {
-            $student = Student::where('name', 'LIKE', '%' . $request->search . '%')->get();
-            return response()->json($student);
+            if ($request->search) {
+                $data = Room::where('id', $request->search)->first();
+                $teacher = Teacher::where('id', $data->teacher_id)->first();
+                $semester = Semester::where('id', $data->semester_id)->first();
+                $student = RoomStudent::where('room_id', $data->id)->get();
+            }
+            return response()->json(['data'=>$data, 'teacher'=>$teacher, 'semester'=>$semester, 'student'=>$student]);
         } else {
-            $sv = RoomStudent::pluck('student_id')->toArray();
             $student = Student::all();
+            $room = Room::all();
+            $teacher = Teacher::all();
+            $semester = Semester::all();
         }
-        $room = Room::all();
-        $teacher = Teacher::all();
+
         return view('admin.student.add-student-room', ['student' => $student, 'semester' => $semester, 'room' => $room, 'teacher' => $teacher, 'semester' => $semester]);
     }
     public function store(Request $request)
