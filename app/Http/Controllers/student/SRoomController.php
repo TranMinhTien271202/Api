@@ -37,7 +37,11 @@ class SRoomController extends Controller
                 $semester = Semester::whereDate('start_date', '<=', $day)->whereDate('end_date', '>=', $day)->first();
                 $data = RoomStudent::join('students', 'students.id', '=', 'room_students.student_id')
                     ->where('room_students.student_id', auth('student')->user()->id)
-                    ->where('semester_id', $semester->id)
+                    ->where(function ($q) use ($semester){
+                        if ($semester){
+                            $q->where('semester_id', $semester->id);
+                        }
+                    })
                     ->select('room_students.*')
                     ->get();
                 return DataTables::of($data)

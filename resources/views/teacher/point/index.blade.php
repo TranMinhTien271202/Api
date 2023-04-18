@@ -66,7 +66,7 @@
                                     <div class="form-group">
                                         <label for="name" class="col-sm control-label">Sinh viên</label>
                                         <div class="col-sm-12">
-                                            <select name="student_id" class="form-control" id="student_id">
+                                            <select name="student_id" class="select2" style="width:100%" id="student_id">
                                                 <option value="">Mời Chọn Sinh Viên</option>
                                                 @foreach ($student as $student)
                                                     <option value="{{ $student->student_id }}">
@@ -79,7 +79,7 @@
                                     <div class="form-group">
                                         <label for="name" class="col-sm control-label">Môn học</label>
                                         <div class="col-sm-12">
-                                            <select class="form-control" id="subject_id" name="subject_id">
+                                            <select class="select2" style="width:100%" id="subject_id" name="subject_id">
                                                 <option value="">Mời Chọn môn học</option>
                                                 @foreach ($subject as $subject)
                                                     <option value="{{ $subject->id }}">
@@ -92,7 +92,7 @@
                                     <div class="form-group">
                                         <label for="name" class="col-sm control-label">Lớp học</label>
                                         <div class="col-sm-12">
-                                            <select name="room_id" class="form-control" id="room_id">
+                                            <select name="room_id" class="select2" style="width:100%" id="room_id">
                                                 <option value="">Mời Chọn lớp học</option>
                                                 @foreach ($room as $room)
                                                     <option value="{{ $room->room_id }}">
@@ -188,9 +188,9 @@
                         $('#_id').val(data.id);
                         $('#value').val(data.value);
                         $('#teacher_id').val(data.teacher_id);
-                        $('#student_id').val(data.student_id);
-                        $('#subject_id').val(data.subject_id);
-                        $('#room_id').val(data.room_id);
+                        $("#student_id").val(data.student_id).trigger('change');
+                        $("#subject_id").val(data.subject_id).trigger('change');
+                        $("#room_id").val(data.room_id).trigger('change');
                     })
                 });
                 /* Create Product Code -*/
@@ -222,8 +222,12 @@
                                     icon: 'success',
                                     title: data.success
                                 })
-                                $('.data-table').DataTable().destroy();
-                                fill_datatable();
+                                setTimeout(() => {
+                                    $('#productForm').trigger("reset");
+                                    $('#ajaxModel').modal('hide');
+                                    $('.data-table').DataTable().destroy();
+                                    fill_datatable();
+                                }, 200);
                             } else {
                                 printErrorMsg(data.message);
                             }

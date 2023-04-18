@@ -186,9 +186,7 @@
                             title: data.success
                         })
                         setTimeout(() => {
-                            $('#productForm').trigger("reset");
-                            $('#ajaxModel').modal('hide');
-                            table.draw();
+                            location.reload();
                         }, 300);
                     } else {
                         printErrorMsg(data.message);

@@ -66,10 +66,10 @@
                                     <div class="form-group">
                                         <label for="name" class="col-sm control-label">Môn học</label>
                                         <div class="col-sm-12">
-                                            <select name="subject_id" class="form-control" id="subject_id"
+                                            <select name="subject_id" class="select2" style="width:100%" id="subject_id"
                                                 data-show-subtext="true" data-live-search="true">
                                                 @foreach ($subject as $subject)
-                                                    <option selected="selected" value="{{ $subject->id }}">
+                                                    <option selected value="{{ $subject->id }}">
                                                         {{ $subject->name }}
                                                     </option>
                                                 @endforeach
@@ -80,10 +80,9 @@
                                     <div class="form-group">
                                         <label for="name" class="col-sm control-label">Kỳ học</label>
                                         <div class="col-sm-12">
-                                            <select name="semester_id" class="form-control" id="semester_id"
-                                                data-show-subtext="true" data-live-search="true">
+                                            <select name="semester_id" class="select2" style="width:100%" id="semester_id">
                                                 @foreach ($semester as $semester)
-                                                    <option selected="selected" value="{{ $semester->id }}">
+                                                    <option value="{{ $semester->id }}">
                                                         {{ $semester->name }}
                                                     </option>
                                                 @endforeach
@@ -107,7 +106,7 @@
 @section('script')
     @parent
     <script>
-        $('.select2').select2()
+        $('.select2').select2();
     </script>
     <script type="text/javascript">
         $(function() {
@@ -172,11 +171,12 @@
                         $('#saveBtn').val("edit-user");
                         $('#ajaxModel').modal('show');
                         $('#_id').val(data.id);
-                        $('#value').val(data.value);
-                        $('#teacher_id').val(data.teacher_id);
-                        $('#student_id').val(data.student_id);
-                        $('#subject_id').val(data.subject_id);
-                        $('#room_id').val(data.room_id);
+                        $('#name').val(data.name);
+                        // $('#teacher_id').val(data.teacher_id);
+                        // $('#subject_id').val(data.subject_id);
+                        // $('#semester_id').val(data.semester_id);
+                        $("#subject_id").val(data.subject_id).trigger('change');
+                        $("#semester_id").val(data.semester_id).trigger('change');
                     })
                 });
                 /* Create Product Code -*/
@@ -210,8 +210,12 @@
                                     icon: 'success',
                                     title: data.success
                                 })
-                                $('#data-table').DataTable().destroy();
-                                fill_datatable();
+                                setTimeout(() => {
+                                    $('#productForm').trigger("reset");
+                                    $('#ajaxModel').modal('hide');
+                                    $('#data-table').DataTable().destroy();
+                                    fill_datatable();
+                                }, 200);
                             } else {
                                 printErrorMsg(data.message);
                             }

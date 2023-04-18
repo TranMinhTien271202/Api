@@ -184,11 +184,11 @@
                         $('#saveBtn').val("edit-user");
                         $('#ajaxModel').modal('show');
                         $('#_id').val(data.id);
-                        $('#value').val(data.value);
-                        $('#teacher_id').val(data.teacher_id);
-                        $('#student_id').val(data.student_id);
-                        $('#subject_id').val(data.subject_id);
-                        $('#room_id').val(data.room_id);
+                        $('#name').val(data.name);
+                        $("#teacher_id").val(data.teacher_id).trigger('change');
+                        $("#student_id").val(data.student_id).trigger('change');
+                        $("#subject_id").val(data.subject_id).trigger('change');
+                        $("#room_id").val(data.room_id).trigger('change');
                     })
                 });
                 /* Create Product Code -*/

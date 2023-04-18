@@ -10,6 +10,7 @@ use App\Models\Semester;
 use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
 
 class ARoomController extends Controller
@@ -89,16 +90,32 @@ class ARoomController extends Controller
      */
     public function store(Request $request)
     {
-        $data =  Room::updateOrCreate(
-            ['id' => $request->_id],
+        $validator = Validator::make(
+            $request->all(),
             [
-                'name' => $request->name,
-                'teacher_id' => $request->teacher_id,
-                'subject_id' => $request->subject_id,
-                'semester_id' => $request->semester_id,
+                'name' => 'required',
+                'subject_id' => 'required',
+                'semester_id' => 'required',
+            ],
+            [
+                'name.required' => "Tên lớp không được để trống.",
+                'semester_id.required' => 'Kỳ học không được để trống.',
+                'subject_id.required' => 'Môn học không được để trống.',
             ]
         );
-        return response()->json(['status' => 1, 'success' => 'Product successfully.', $data]);
+        if ($validator->passes()) {
+            $data =  Room::updateOrCreate(
+                ['id' => $request->_id],
+                [
+                    'name' => $request->name,
+                    'teacher_id' => $request->teacher_id,
+                    'subject_id' => $request->subject_id,
+                    'semester_id' => $request->semester_id,
+                ]
+            );
+            return response()->json(['success' => 'Thêm lớp học thành công.', $data]);
+        }
+        return response()->json(['message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),]);
     }
 
     /**
