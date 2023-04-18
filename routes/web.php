@@ -54,10 +54,12 @@ Route::prefix('admin')->group(function () {
         Route::post('auth-profile', [AuthController::class, 'updateProfile'])->name('auth.updateProfile');
         Route::resource('admin-room', ARoomController::class);
         Route::get('admin-detail-room/{id}', [ARoomController::class, 'detail'])->name('admin.detail.room');
+        Route::get('delete-room/{id}', [ARoomController::class, 'delete'])->name('delete.room');
         Route::resource('admin-subject', ASubjectController::class);
         Route::resource('admin-semester', ASemesterController::class);
         Route::resource('admin-student', AStudentController::class);
         Route::resource('admin-teacher', ATeacherController::class);
+
         Route::get('admin-add-student', [AddstudentController::class, 'index'])->name('admin.addStudent');
         Route::post('admin-add-student', [AddstudentController::class, 'store'])->name('admin.addStudent.store');
     });

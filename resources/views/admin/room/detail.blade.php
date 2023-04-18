@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Danh sách sinh viên lớp {{$room->name   }}</h1>
+                        <h1 class="m-0">Danh sách sinh viên lớp {{ $room->name }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -18,25 +18,59 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <table class="table table-bordered data-table">
+                <table id="data-table" class="table table-bordered data-table">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Giáo viên</th>
+                            <th>STT</th>
+                            <th>Tên sinh viên</th>
+                            <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data as $key => $item)
-                            <tr>
-                                <td>{{$key+1}}</td>
-                                <td>{{$item->students->name}}</td>
-                            </tr>
-                        @endforeach
                     </tbody>
                 </table>
-                {{$data->links()}}
+                <form id="productForm" name="productForm" class="form-horizontal">
+                    <input type="hidden" name="_id" id="_id">
+                </form>
             </div>
         </div>
     </div>
-    </div>
+@endsection
+@section('script')
+    @parent
+    <script>
+        $('.select2').select2()
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            /*Pass Header Token*/
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var _id = $(this).data('id');
+            var table = $('.data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ url('admin/admin-detail-room/'. request()->route('id')) }}",
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'students',
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+        });
+    </script>
 @endsection

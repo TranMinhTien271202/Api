@@ -65,6 +65,7 @@ class ARoomController extends Controller
 
                         $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fa-solid fa-trash"></i></a>';
 
+                        $btn = $btn . ' <a href="/admin/admin-detail-room/' . $row->id . '"  data-id="' . $row->id . '" class="btn btn-info btn-sm"><i class="fa-solid fa-circle-info"></i></a>';
                         return $btn;
                     })
                     ->make(true);
@@ -157,10 +158,30 @@ class ARoomController extends Controller
             return response()->json(['status' => 2, 'success' => 'Xóa không thành công.']);
         }
     }
-    public function detail($id)
+    public function detail($id, Request $request)
     {
-        $data = RoomStudent::where('room_id', $id)->paginate(10);
+        $data = RoomStudent::where('room_id', $id)->get();
         $room = Room::find($id);
+        if ($request->ajax()) {
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn('students', function ($data) {
+                    return $data->students->name;
+                })
+                ->addColumn('action', function ($row) {
+
+                    $btn = ' <a href="/admin/delete-room/' . $row->student_id . '" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>';
+
+                    return $btn;
+                })
+                ->make(true);
+        }
         return view('admin.room.detail', ['data' => $data, 'room' => $room]);
+    }
+    public function delete($id){
+        $data = RoomStudent::where('student_id', $id)->first();
+        $point = Point::where('student_id', $id)->where('room_id', $data->room_id)->delete();
+        $room = RoomStudent::where('student_id', $id)->delete();
+        return back();
     }
 }

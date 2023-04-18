@@ -188,7 +188,7 @@
                         $("#teacher_id").val(data.teacher_id).trigger('change');
                         $("#student_id").val(data.student_id).trigger('change');
                         $("#subject_id").val(data.subject_id).trigger('change');
-                        $("#room_id").val(data.room_id).trigger('change');
+                        $("#semester_id").val(data.semester_id).trigger('change');
                     })
                 });
                 /* Create Product Code -*/
@@ -222,6 +222,8 @@
                                     icon: 'success',
                                     title: data.success
                                 })
+                                $('#productForm').trigger("reset");
+                                $('#ajaxModel').modal('hide');
                                 $('#data-table').DataTable().destroy();
                                 fill_datatable();
                             } else {
@@ -307,7 +309,6 @@
                     fill_datatable();
                 });
             });
-            /*Click to Button*/
         });
 
         function printErrorMsg(msg) {
