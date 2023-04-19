@@ -19,6 +19,19 @@ class PointController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            if ($request->room_id) {
+                $student = RoomStudent::where('teacher_id', auth('teacher')->user()->id)->where('room_id', $request->room_id)->pluck('student_id')->toArray();
+                $student = Student::whereIn('id', $student)->get();
+                $room = RoomStudent::where('teacher_id', auth('teacher')->user()->id)->groupBy('room_id')->get();
+                $subject = RoomStudent::join('rooms', 'rooms.id', '=', 'room_students.room_id')
+                    ->join('subjects', 'subjects.id', '=', 'rooms.subject_id')
+                    ->where('room_id', $request->room_id)
+                    ->where('room_students.teacher_id', auth('teacher')->user()->id)
+                    ->select('subjects.*')
+                    ->groupBy('room_id')
+                    ->first();
+                return response()->json(['student' => $student, 'room' => $room, 'subject' => $subject]);
+            }
             if ($request->search) {
                 $data = Point::with(['teachers', 'subjects', 'students', 'rooms'])
                     ->where('room_id', $request->search)
@@ -74,7 +87,8 @@ class PointController extends Controller
                     ->make(true);
             }
         }
-        $student = RoomStudent::where('teacher_id', auth('teacher')->user()->id)->groupBy('student_id')->get();
+        $student = RoomStudent::where('teacher_id', auth('teacher')->user()->id)->pluck('student_id')->toArray();
+        $student = Student::whereIn('id', $student)->get();
         $room = RoomStudent::where('teacher_id', auth('teacher')->user()->id)->groupBy('room_id')->get();
         $subject = RoomStudent::join('rooms', 'rooms.id', '=', 'room_students.room_id')
             ->join('subjects', 'subjects.id', '=', 'rooms.subject_id')

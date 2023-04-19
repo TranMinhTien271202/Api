@@ -170,7 +170,7 @@ class ARoomController extends Controller
                 })
                 ->addColumn('action', function ($row) {
 
-                    $btn = ' <a href="/admin/delete-room/' . $row->student_id . '" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>';
+                    $btn = ' <a href="/admin/delete-room/' . $row->student_id . '" onclick="return confirm(`Are you Sure`)" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>';
 
                     return $btn;
                 })
@@ -178,7 +178,8 @@ class ARoomController extends Controller
         }
         return view('admin.room.detail', ['data' => $data, 'room' => $room]);
     }
-    public function delete($id){
+    public function delete($id)
+    {
         $data = RoomStudent::where('student_id', $id)->first();
         $point = Point::where('student_id', $id)->where('room_id', $data->room_id)->delete();
         $room = RoomStudent::where('student_id', $id)->delete();

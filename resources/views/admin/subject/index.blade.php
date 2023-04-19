@@ -46,6 +46,7 @@
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Mời nhập tên môn học" value="" maxlength="50" required="">
+                                                <span class="text-danger error-text name_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -54,6 +55,7 @@
                                             <input type="text" class="form-control" id="subject_code" name="subject_code"
                                                 placeholder="Mời nhập mã môn học" value="" maxlength="50"
                                                 required="">
+                                                <span class="text-danger error-text subject_code_err"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -210,6 +212,12 @@
                 })
             });
         });
+        function printErrorMsg(msg) {
+            $.each(msg, function(key, value) {
+                console.log(key);
+                $('.' + key + '_err').text(value);
+            });
+        }
     </script>
 @endsection
 

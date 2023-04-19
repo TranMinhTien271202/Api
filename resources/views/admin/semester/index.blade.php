@@ -47,6 +47,7 @@
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                                <span class="text-danger error-text name_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -54,6 +55,7 @@
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="start_date" name="start_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                                <span class="text-danger error-text start_date_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -61,6 +63,7 @@
                                         <div class="col-sm-12">
                                             <input type="date" class="form-control" id="end_date" name="end_date"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
+                                                <span class="text-danger error-text end_date_err"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -219,6 +222,12 @@
                 })
             });
         });
+        function printErrorMsg(msg) {
+            $.each(msg, function(key, value) {
+                console.log(key);
+                $('.' + key + '_err').text(value);
+            });
+        }
     </script>
 @endsection
 

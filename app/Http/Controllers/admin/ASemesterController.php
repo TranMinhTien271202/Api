@@ -59,9 +59,9 @@ class ASemesterController extends Controller
                 'end_date' => 'required'
             ],
             [
-                'name.required' => "Tên môn học không được để trống.",
-                'start_date.required' => 'Mã môn học không được để trống.',
-                'end_date.required' => 'Mã môn học không được để trống.',
+                'name.required' => "Tên kỳ học không được để trống.",
+                'start_date.required' => 'Ngày bắt đầu không được để trống.',
+                'end_date.required' => 'Ngày kết thúc không được để trống.',
             ]
         );
         if ($validator->passes()) {

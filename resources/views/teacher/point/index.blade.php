@@ -64,13 +64,26 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label for="name" class="col-sm control-label">Lớp học</label>
+                                        <div class="col-sm-12">
+                                            <select name="room_id" class="select2" style="width:100%" id="room_id">
+                                                <option value="">Mời Chọn lớp học</option>
+                                                @foreach ($room as $room)
+                                                    <option value="{{ $room->room_id }}">
+                                                        {{ $room->rooms->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <span class="text-danger error-text room_id_err"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="name" class="col-sm control-label">Sinh viên</label>
                                         <div class="col-sm-12">
                                             <select name="student_id" class="select2" style="width:100%" id="student_id">
                                                 <option value="">Mời Chọn Sinh Viên</option>
                                                 @foreach ($student as $student)
-                                                    <option value="{{ $student->student_id }}">
-                                                        {{ $student->students->name }}</option>
+                                                    <option value="{{ $student->id }}">
+                                                        {{ $student->name }}</option>
                                                 @endforeach
                                             </select>
                                             <span class="text-danger error-text student_id_err"></span>
@@ -87,19 +100,6 @@
                                                 @endforeach
                                             </select>
                                             <span class="text-danger error-text subject_id_err"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="name" class="col-sm control-label">Lớp học</label>
-                                        <div class="col-sm-12">
-                                            <select name="room_id" class="select2" style="width:100%" id="room_id">
-                                                <option value="">Mời Chọn lớp học</option>
-                                                @foreach ($room as $room)
-                                                    <option value="{{ $room->room_id }}">
-                                                        {{ $room->rooms->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <span class="text-danger error-text room_id_err"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
@@ -312,6 +312,31 @@
                 });
             });
             /*Click to Button*/
+        });
+        $('#room_id').on('change', function() {
+            room_id = $('#room_id').val();
+            $.ajax({
+                type: 'get',
+                url: 'point',
+                data: {
+                    'room_id': room_id
+                },
+                success: function(data) {
+                    console.log(data);
+                    var html = `<option value="` + data.subject.id + `">` + data.subject.name +
+                        `</option>`;
+                    $('#subject_id').html(html);
+
+                    let text = "";
+                    for (let item of data.student) {
+                        console.log(item);
+                        text += `<option value="` + item.id + `">` + item.name +
+                        `</option>`;
+                        $('#student_id').html(text);
+                    }
+                }
+
+            });
         });
 
         function printErrorMsg(msg) {

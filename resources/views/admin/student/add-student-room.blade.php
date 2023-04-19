@@ -72,27 +72,13 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Danh sách học viên</h3>
                                 </div>
-                                {{-- <input type="hidden" name="id" id="id" value="{{ $id }}">
-                                <div class="navbar-search" style="padding:15px">
-                                    <form class="form-inline">
-                                        <div class="input-group input-group-sm">
-                                            <input class="form-control form-control-navbar" type="search"
-                                                placeholder="Search" id="search" name="search" aria-label="Search">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-secondary" type="submit">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div> --}}
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Chọn học viên</label>
                                                 <select class="select2" id="student_id" multiple="multiple"
-                                                    data-placeholder="Select a State" style="width:550px">
+                                                    data-placeholder="Chọn sinh viên" style="width:550px">
                                                     @foreach ($student as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endforeach
@@ -154,6 +140,12 @@
 
                     var html = `<option value="`+ data.semester.id +`">`+ data.semester.name +`</option>`;
                     $('#semester_id').html(html);
+
+                    // for (let item of data.student) {
+                    //     var html = ``;
+                    //     html += `<option selected value="`+ item.id +`">`+ item.student_id +`</option>`;
+                    // $('#student_id').html(html);
+                    // }
                 }
 
             });

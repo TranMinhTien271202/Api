@@ -54,7 +54,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ url('admin/admin-detail-room/'. request()->route('id')) }}",
+                    url: "{{ url('admin/admin-detail-room/' . request()->route('id')) }}",
                 },
                 columns: [{
                         data: 'DT_RowIndex',
