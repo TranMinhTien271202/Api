@@ -168,7 +168,7 @@
                             })
                             setTimeout(() => {
                                 $('#productForm').trigger("reset");
-                                $('#ajaxModel').modal('hide');
+                                // $('#ajaxModel').modal('hide');
                                 table.draw();
                             }, 300);
                         } else {

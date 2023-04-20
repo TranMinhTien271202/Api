@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\Room;
 use App\Models\RoomStudent;
 use App\Models\Semester;
@@ -22,9 +23,10 @@ class AddstudentController extends Controller
                 $data = Room::where('id', $request->search)->first();
                 $teacher = Teacher::where('id', $data->teacher_id)->first();
                 $semester = Semester::where('id', $data->semester_id)->first();
-                $student = RoomStudent::where('room_id', $data->id)->get();
+                $arr = RoomStudent::where('room_id', $data->id)->pluck('student_id')->toArray();
+                $student = Student::whereNotIn('id', $arr)->get();
             }
-            return response()->json(['data'=>$data, 'teacher'=>$teacher, 'semester'=>$semester, 'student'=>$student]);
+            return response()->json(['data' => $data, 'arr' => $arr, 'teacher' => $teacher, 'semester' => $semester, 'student' => $student]);
         } else {
             $student = Student::all();
             $room = Room::all();
@@ -54,6 +56,7 @@ class AddstudentController extends Controller
         if ($validator->passes()) {
             $room = Room::where('id', $request->room_id)->first();
             $student = Student::whereIn('id', $request->student_id)->get();
+            $nofi = "Bạn đã được thêm vào lớp " . $room->name;
             // $data =  RoomStudent::whereIn('student_id', $request->student_id)->get();
             foreach ($student as $row) {
                 $data = new RoomStudent();
@@ -63,7 +66,16 @@ class AddstudentController extends Controller
                 $data->semester_id = $request->semester_id;
                 $data->save();
             };
-            return response()->json(['success' => 'Thêm sinh viên vào lớp ' . $room->name . ' thành công', 'data' => $request->all()]);
+
+            foreach ($student as $item) {
+                $notifi = new Notification();
+                $notifi->name = $nofi;
+                $notifi->student_id = $item->id;
+                $notifi->save();
+            }
+
+
+            return response()->json(['success' => 'Thêm sinh viên vào lớp ' . $room->name . ' thành công', 'data' => $request->all(), 'nofi' => $nofi]);
         }
         return response()->json([
             'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),

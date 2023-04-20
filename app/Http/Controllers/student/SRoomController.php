@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\Room;
 use App\Models\RoomStudent;
 use App\Models\Semester;
@@ -56,7 +57,9 @@ class SRoomController extends Controller
                     ->make(true);
             }
         }
+        $nofiti = Notification::where('student_id', auth('student')->user()->id)->limit(5)->orderBy('id', 'DESC')->get();
+        $nofitis = Notification::where('student_id', auth('student')->user()->id)->where('status', 0)->limit(5)->orderBy('id', 'DESC')->get();
         $semester = Semester::all();
-        return view('student.room.index', ['semester' => $semester]);
+        return view('student.room.index', ['semester' => $semester, 'nofiti' => $nofiti, 'nofitis' => $nofitis]);
     }
 }

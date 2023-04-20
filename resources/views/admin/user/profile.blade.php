@@ -9,8 +9,8 @@
         }
 
         .upload img {
-            border-radius: 50%;
-            border: 6px solid #eaeaea;
+            border-radius: 5px;
+            border: 1px solid #eaeaea;
         }
 
         .upload .round {
@@ -22,7 +22,7 @@
             height: 32px;
             line-height: 33px;
             text-align: center;
-            border-radius: 50%;
+            border-radius: 5px;
             overflow: hidden;
         }
 
@@ -42,7 +42,7 @@
         <form action="" enctype="multipart/form-data">
             <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
-                    <div class="upload" >
+                    <div class="upload">
                         <div class="image-1">
                             <img src="../../dist/img/user4-128x128.jpg" width=100 height=100 alt="">
                         </div>

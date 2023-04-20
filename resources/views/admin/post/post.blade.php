@@ -1,16 +1,16 @@
-@extends('teacher.layout.app')
+@extends('admin.layout.app')
 @section('content')
     <div class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Điểm</h1>
+                        <h1 class="m-0">Lớp</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                            <li class="breadcrumb-item active">Điểm</li>
+                            <li class="breadcrumb-item active">Lớp</li>
                         </ol>
                     </div>
                 </div>
@@ -20,24 +20,13 @@
             <div class="container-fluid">
                 <a class="btn btn-success xs btn-sm" href="javascript:void(0)" id="createNewProduct"><i
                         class="fa-solid fa-plus"></i></a>
-                <select class="select2" style="width:15%;" id="search" data-placeholder="Chọn lớp" style="width: 100%;">
-                    @foreach ($room as $row)
-                        <option value="{{ $row->room_id }}">
-                            {{ $row->rooms->name }}</option>
-                    @endforeach
-                </select>
-                <button type="submit" class="btn btn-primary btn-sm" id="btn-search"
-                    style="padding-bottom: 5px;border-radius: 5px;height:30px"><i
-                        class="fa-solid fa-magnifying-glass"></i></button>
-                <table class="table table-bordered data-table">
+                <table id="data-table" class="table table-bordered data-table">
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Điểm</th>
-                            <th>Sinh viên</th>
-                            <th>Giáo viên</th>
-                            <th>Môn học</th>
-                            <th>Lớp học</th>
+                            <th>Tiêu đề</th>
+                            <th>Người đăng</th>
+                            <th>Loại tin tức</th>
                             <th width="280px">Quản lý</th>
                         </tr>
                     </thead>
@@ -53,53 +42,32 @@
                             <div class="modal-body">
                                 <form id="productForm" name="productForm" class="form-horizontal">
                                     <input type="hidden" name="_id" id="_id">
-                                    <input type="hidden" name="teacher_id" id="teacher_id"
-                                        value="{{ auth('teacher')->user()->id }}">
+                                    <input type="hidden" name="user" id="user" value="{{ auth()->user()->id }}">
                                     <div class="form-group">
-                                        <label for="name" class="col-sm control-label">Điểm</label>
+                                        <label for="name" class="col-sm control-label">Tên lớp</label>
                                         <div class="col-sm-12">
-                                            <input type="text" class="form-control" id="value" name="value"
+                                            <input type="text" class="form-control" id="title" name="title"
                                                 placeholder="Enter Name" value="" maxlength="50" required="">
-                                            <span class="text-danger error-text value_err"></span>
+                                            <span class="text-danger error-text name_err"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name" class="col-sm control-label">Lớp học</label>
+                                        <label for="name" class="col-sm control-label">Loại tin tức</label>
                                         <div class="col-sm-12">
-                                            <select name="room_id" class="select2" style="width:100%" id="room_id">
-                                                <option value="">Mời Chọn lớp học</option>
-                                                @foreach ($room as $room)
-                                                    <option value="{{ $room->room_id }}">
-                                                        {{ $room->rooms->name }}</option>
+                                            <select name="post_type" class="select2" style="width:100%" id="post_type"
+                                                data-show-subtext="true" data-live-search="true">
+                                                @foreach ($type as $type)
+                                                    <option selected="selected" value="{{ $type->id }}">
+                                                        {{ $type->name }}
+                                                    </option>
                                                 @endforeach
                                             </select>
-                                            <span class="text-danger error-text room_id_err"></span>
+                                            <span class="text-danger error-text post_type_err"></span>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="name" class="col-sm control-label">Sinh viên</label>
-                                        <div class="col-sm-12">
-                                            <select name="student_id" class="select2" style="width:100%" id="student_id">
-                                                <option value="">Mời Chọn Sinh Viên</option>
-                                                @foreach ($student as $student)
-                                                    <option value="{{ $student->id }}">
-                                                        {{ $student->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <span class="text-danger error-text student_id_err"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="name" class="col-sm control-label">Môn học</label>
-                                        <div class="col-sm-12">
-                                            <select class="form-control" style="width:100%" data-placeholder="Môn học" id="subject_id" name="subject_id">
-                                                @foreach ($subject as $subject)
-                                                    <option value="{{ $subject->id }}">
-                                                        {{ $subject->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <span class="text-danger error-text subject_id_err"></span>
-                                        </div>
+                                    <div class="form-group col-lg-12 col-md-12">
+                                        <label>Chi tiết về công ty</label>
+                                        <textarea type="text" name="detail" id="detail"></textarea>
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Lưu
@@ -116,6 +84,10 @@
 @endsection
 @section('script')
     @parent
+    <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('detail');
+    </script>
     <script>
         $('.select2').select2()
     </script>
@@ -136,7 +108,7 @@
                         processing: true,
                         serverSide: true,
                         ajax: {
-                            url: "{{ route('point.index') }}",
+                            url: "{{ route('admin-post.index') }}",
                             data: {
                                 search: search,
                             }
@@ -146,19 +118,19 @@
                                 name: 'DT_RowIndex'
                             },
                             {
-                                data: 'value',
+                                data: 'title',
+                            },
+                            // {
+                            //     data: 'detail',
+                            //     render: function(data, type, row, meta) {
+                            //         return '<div data-ckeditor>' + data + '</div>';
+                            //     }
+                            // },
+                            {
+                                data: 'user',
                             },
                             {
-                                data: 'students',
-                            },
-                            {
-                                data: 'teachers',
-                            },
-                            {
-                                data: 'subjects',
-                            },
-                            {
-                                data: 'rooms',
+                                data: 'type',
                             },
                             {
                                 data: 'action',
@@ -166,7 +138,27 @@
                                 orderable: false,
                                 searchable: false
                             },
-                        ]
+                        ],
+                        // columnDefs: [
+                        //     // Initialize CKEditor for the "content" column
+                        //     {
+                        //         targets: 2,
+                        //         createdCell: function(td, cellData, rowData, row, col) {
+                        //             let editor = CKEDITOR.replace(td, {
+                        //                 toolbar: ['undo', 'redo', 'bold', 'italic',
+                        //                     'underline'
+                        //                 ]
+                        //             });
+                        //             editor.setData(cellData);
+                        //             editor.on('change', function(event) {
+                        //                 rowData['content'] = event.editor.getData();
+                        //             });
+                        //         },
+                        //         render: function(data, type, row, meta) {
+                        //             return '<div data-ckeditor>' + data + '</div>';
+                        //         }
+                        //     }
+                        // ]
                     });
 
                 }
@@ -174,31 +166,38 @@
                     $('#saveBtn').val("create-product");
                     $('#_id').val('');
                     $('#productForm').trigger("reset");
-                    $('#modelHeading').html("Thêm điểm");
+                    $('#modelHeading').html("Thêm mới lớp học");
                     $('#ajaxModel').modal('show');
                 });
                 /*Click to Edit Button*/
                 $('body').on('click', '.editProduct', function() {
                     var _id = $(this).data('id');
-                    $.get("{{ route('point.index') }}" + '/' + _id + '/edit', function(data) {
-                        $('#modelHeading').html("Sửa điểm");
+                    $.get("{{ route('admin-post.index') }}" + '/' + _id + '/edit', function(data) {
+                        $('#modelHeading').html("Sửa lớp học");
                         $('#saveBtn').val("edit-user");
                         $('#ajaxModel').modal('show');
                         $('#_id').val(data.id);
-                        $('#value').val(data.value);
-                        $('#teacher_id').val(data.teacher_id);
-                        $("#student_id").val(data.student_id).trigger('change');
-                        $("#subject_id").val(data.subject_id).trigger('change');
-                        $("#room_id").val(data.room_id).trigger('change');
+                        $('#title').val(data.title);
+                        $('#user').val(data.user);
+                        $('#detail').val(data.detail);
+                        $("#post_type").val(data.post_type).trigger('change');
                     })
                 });
                 /* Create Product Code -*/
                 $('#saveBtn').click(function(e) {
                     e.preventDefault();
-                    $(this).html('Sending..');
+                    var detail = CKEDITOR.instances.detail.getData();
+                    var title = $('#title').val();
+                    var type = $('#post_type').val();
+                    var user = $('#user').val();
                     $.ajax({
-                        data: $('#productForm').serialize(),
-                        url: "{{ route('point.store') }}",
+                        data: {
+                            detail: detail,
+                            title: title,
+                            type: type,
+                            user: user,
+                        },
+                        url: "{{ route('admin-post.store') }}",
                         type: "POST",
                         dataType: 'json',
                         success: function(data) {
@@ -211,9 +210,11 @@
                                     timer: 3000,
                                     timerProgressBar: true,
                                     didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter',
+                                        toast.addEventListener(
+                                            'mouseenter',
                                             Swal.stopTimer)
-                                        toast.addEventListener('mouseleave',
+                                        toast.addEventListener(
+                                            'mouseleave',
                                             Swal.resumeTimer)
                                     }
                                 })
@@ -221,12 +222,10 @@
                                     icon: 'success',
                                     title: data.success
                                 })
-                                setTimeout(() => {
-                                    $('#productForm').trigger("reset");
-                                    $('#ajaxModel').modal('hide');
-                                    $('.data-table').DataTable().destroy();
-                                    fill_datatable();
-                                }, 200);
+                                $('#productForm').trigger("reset");
+                                $('#ajaxModel').modal('hide');
+                                $('#data-table').DataTable().destroy();
+                                fill_datatable();
                             } else {
                                 printErrorMsg(data.message);
                             }
@@ -252,7 +251,7 @@
                             var _id = $(this).data("id");
                             $.ajax({
                                 type: "DELETE",
-                                url: "{{ route('point.index') }}" + '/' + _id,
+                                url: "{{ route('admin-post.index') }}" + '/' + _id,
                                 success: function(data) {
                                     const Toast = Swal.mixin({
                                         toast: true,
@@ -278,7 +277,7 @@
                                         icon: 'success',
                                         title: data.success
                                     })
-                                    $('.data-table').DataTable().destroy();
+                                    $('#data-table').DataTable().destroy();
                                     fill_datatable();
                                 },
                                 error: function(data) {
@@ -288,51 +287,6 @@
                         }
                     })
                 });
-                $('#btn-search').click(function() {
-                    var search = $('#search').val();
-                    $.ajax({
-                        data: {
-                            search: search,
-                        },
-                        url: "{{ route('point.index') }}",
-                        type: "GET",
-                        dataType: 'json',
-                        success: function(data) {
-                            console.log(data);
-                            $('.data-table').DataTable().destroy();
-                            fill_datatable(search);
-                        },
-                    });
-                });
-                $('#reset').click(function() {
-                    $('#semester').val('');
-                    $('#data-table').DataTable().destroy();
-                    fill_datatable();
-                });
-            });
-            /*Click to Button*/
-        });
-        $('#room_id').on('change', function() {
-            room_id = $('#room_id').val();
-            $.ajax({
-                type: 'get',
-                url: 'point',
-                data: {
-                    'room_id': room_id
-                },
-                success: function(data) {
-                    var html = `<option value="` + data.subject.id + `">` + data.subject.name +
-                        `</option>`;
-                    $('#subject_id').html(html);
-
-                    let text = "";
-                    for (let item of data.student) {
-                        text += `<option value="` + item.id + `">` + item.name +
-                        `</option>`;
-                        $('#student_id').html(text);
-                    }
-                }
-
             });
         });
 

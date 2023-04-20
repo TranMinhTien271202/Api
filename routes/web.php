@@ -11,6 +11,8 @@ use App\Http\Controllers\Auth\StudentLoginController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\TeacherLoginController;
 use App\Http\Controllers\PointController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostTypeController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomStudentController;
 use App\Http\Controllers\SemesterController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\student\SendPointController;
 use App\Http\Controllers\student\SPointController;
 use App\Http\Controllers\student\SRoomController;
 use App\Http\Controllers\student\SStudentController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SyntheController;
 use App\Http\Controllers\TeacherController;
@@ -59,6 +62,8 @@ Route::prefix('admin')->group(function () {
         Route::resource('admin-semester', ASemesterController::class);
         Route::resource('admin-student', AStudentController::class);
         Route::resource('admin-teacher', ATeacherController::class);
+        Route::resource('admin-post-type', PostTypeController::class);
+        Route::resource('admin-post', PostController::class);
 
         Route::get('admin-add-student', [AddstudentController::class, 'index'])->name('admin.addStudent');
         Route::post('admin-add-student', [AddstudentController::class, 'store'])->name('admin.addStudent.store');
@@ -78,6 +83,9 @@ Route::prefix('student')->group(function () {
         Route::get('student-point', [SPointController::class, 'index'])->name('student-point.index');
         Route::get('student-mail', [SendPointController::class, 'view'])->name('student-mail.view');
         Route::get('send-point', [SendPointController::class, 'index'])->name('send-point.index');
+        Route::get('student-post', [PostController::class, 'post'])->name('student-post.post');
+        Route::get('student-post/{id}', [PostController::class, 'detail'])->name('student-post.detail');
+        Route::get('nofiti/{id}', [StudentController::class,'nofiti'])->name('nofiti');
     });
 });
 Route::prefix('teacher')->group(function () {

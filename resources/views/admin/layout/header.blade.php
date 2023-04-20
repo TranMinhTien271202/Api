@@ -26,10 +26,18 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <li class="nav-item">
+                    <a href="admin-dashboard" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Thống kê
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('user.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            Admin
+                            Quản trị
                         </p>
                     </a>
                 </li>
@@ -62,6 +70,22 @@
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Môn Học
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-post-type" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Loại tin tức
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-post" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Tin tức
                         </p>
                     </a>
                 </li>

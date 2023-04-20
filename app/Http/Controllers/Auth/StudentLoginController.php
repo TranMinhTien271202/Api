@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\Point;
+use App\Models\Room;
+use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,6 +18,7 @@ class StudentLoginController extends Controller
 {
     public function index()
     {
+
         return view('student.auth.login');
     }
     public function login(Request $request)
@@ -78,19 +83,27 @@ class StudentLoginController extends Controller
             'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
         ]);
     }
-    public function logout(){
+    public function logout()
+    {
         auth('student')->logout();
         return redirect()->route('student.index');
     }
-    public function dashboard(){
+    public function dashboard()
+    {
+        $nofiti = Notification::where('student_id', auth('student')->user()->id)->limit(5)->orderBy('id', 'DESC')->get();
+        $nofitis = Notification::where('student_id', auth('student')->user()->id)->where('status', 0)->limit(5)->orderBy('id', 'DESC')->get();
         $teacher = Teacher::all();
         $student = Student::all();
         $subject = Subject::all();
-        $data = Point::selectRaw('points.*, sum(value) / count(value) as total')
-        ->groupBy('points.student_id')
-        ->orderBy('total','desc')
-        ->take(5)
-        ->get();
-        return view('student.index', ['teacher' => $teacher, 'student' => $student, 'subject' => $subject, 'data' => $data]);
+        $day = Carbon::now()->format('Y/m/d');
+        $semester = Semester::whereDate('start_date', '<=', $day)->whereDate('end_date', '>=', $day)->first();
+        $room = Room::where('semester_id', '=', $semester->id)->pluck('id')->toArray();
+        $data = Point::whereIn('room_id', $room)
+            ->selectRaw('points.*, sum(value) / count(value) as total')
+            ->groupBy('points.student_id')
+            ->orderBy('total', 'desc')
+            ->take(5)
+            ->get();
+        return view('student.index', ['teacher' => $teacher, 'student' => $student, 'subject' => $subject, 'data' => $data, 'semester' => $semester, 'nofiti' => $nofiti, 'nofitis' => $nofitis]);
     }
 }

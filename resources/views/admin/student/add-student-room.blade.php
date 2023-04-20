@@ -31,8 +31,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Chọn lớp</label>
-                                                <select class="select2 selec" id="room_id" data-placeholder="Select a State"
-                                                    style="width:550px">
+                                                <select class="select2 selec" id="room_id"
+                                                    data-placeholder="Select a State" style="width:550px">
                                                     @foreach ($room as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endforeach
@@ -41,8 +41,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Chọn kỳ</label>
-                                                <select class="select2" id="semester_id" data-placeholder="Select a State"
-                                                    style="width:550px">
+                                                <select class="select2" disabled id="semester_id"
+                                                    data-placeholder="Select a State" style="width:550px">
                                                     @foreach ($semester as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endforeach
@@ -51,7 +51,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Chọn giáo viên</label>
-                                                <select class="select2" id="teacher_id"
+                                                <select class="select2" disabled id="teacher_id"
                                                     data-placeholder="Mời chọn giáo viên" style="width:550px">
                                                     @foreach ($teacher as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -135,17 +135,19 @@
                 },
                 success: function(data) {
                     console.log(data);
-                    var html = `<option value="`+ data.teacher.id +`">`+ data.teacher.name +`</option>`;
+                    var html = `<option value="` + data.teacher.id + `">` + data.teacher.name +
+                        `</option>`;
                     $('#teacher_id').html(html);
 
-                    var html = `<option value="`+ data.semester.id +`">`+ data.semester.name +`</option>`;
+                    var html = `<option value="` + data.semester.id + `">` + data.semester.name +
+                        `</option>`;
                     $('#semester_id').html(html);
 
-                    // for (let item of data.student) {
-                    //     var html = ``;
-                    //     html += `<option selected value="`+ item.id +`">`+ item.student_id +`</option>`;
-                    // $('#student_id').html(html);
-                    // }
+                    var html = "";
+                    for (let item of data.student) {
+                        html += `<option value="` + item.id + `">` + item.name + `</option>`;
+                    }
+                    $('#student_id').html(html);
                 }
 
             });
